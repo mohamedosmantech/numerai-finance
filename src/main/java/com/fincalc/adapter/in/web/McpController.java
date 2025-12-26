@@ -156,12 +156,37 @@ public class McpController {
     private JsonRpcResponse handleInitialize(Object id) {
         Map<String, Object> result = new LinkedHashMap<>();
         result.put("protocolVersion", PROTOCOL_VERSION);
-        result.put("capabilities", Map.of("tools", Map.of()));
-        result.put("serverInfo", Map.of(
-                "name", "Numerai Finance",
-                "version", "1.0.0",
-                "description", "Professional financial calculator for mortgages, investments, and taxes"
+
+        // Enhanced capabilities for ChatGPT
+        Map<String, Object> capabilities = new LinkedHashMap<>();
+        capabilities.put("tools", Map.of("listChanged", false));
+        capabilities.put("supportsFullActions", true);
+        result.put("capabilities", capabilities);
+
+        // Server info with keywords for triggering
+        Map<String, Object> serverInfo = new LinkedHashMap<>();
+        serverInfo.put("name", "Numerai Finance");
+        serverInfo.put("version", "1.0.0");
+        serverInfo.put("description", "Professional financial calculator for mortgages, investments, and taxes");
+        serverInfo.put("keywords", List.of(
+                "mortgage", "loan", "payment", "calculator",
+                "compound interest", "investment", "savings",
+                "tax", "taxes", "income tax", "federal tax",
+                "interest rate", "finance", "financial"
         ));
+        result.put("serverInfo", serverInfo);
+
+        // OpenAI-specific metadata
+        result.put("_meta", Map.of(
+                "openai/supportsFullActions", true,
+                "openai/keywordsForTriggering", List.of(
+                        "mortgage", "loan payment", "calculate mortgage",
+                        "compound interest", "investment calculator",
+                        "tax estimate", "income tax", "tax calculator",
+                        "interest rate", "finance calculator"
+                )
+        ));
+
         return JsonRpcResponse.success(id, result);
     }
 
