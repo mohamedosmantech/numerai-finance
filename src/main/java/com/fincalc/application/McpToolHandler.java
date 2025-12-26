@@ -640,7 +640,7 @@ public class McpToolHandler {
                 "required", List.of("principal", "annualRate", "years"),
                 "additionalProperties", false
         ));
-        def.put("annotations", Map.of("destructiveHint", false, "readOnlyHint", true));
+        def.put("annotations", Map.of("destructiveHint", false, "readOnlyHint", true, "openWorldHint", false));
         def.put("securitySchemes", List.of(Map.of("type", "oauth2")));
         return def;
     }
@@ -661,7 +661,7 @@ public class McpToolHandler {
                 "required", List.of("principal", "annualRate", "years"),
                 "additionalProperties", false
         ));
-        def.put("annotations", Map.of("destructiveHint", false, "readOnlyHint", true));
+        def.put("annotations", Map.of("destructiveHint", false, "readOnlyHint", true, "openWorldHint", false));
         def.put("securitySchemes", List.of(Map.of("type", "oauth2")));
         return def;
     }
@@ -681,7 +681,7 @@ public class McpToolHandler {
                 "required", List.of("grossIncome", "filingStatus"),
                 "additionalProperties", false
         ));
-        def.put("annotations", Map.of("destructiveHint", false, "readOnlyHint", true));
+        def.put("annotations", Map.of("destructiveHint", false, "readOnlyHint", true, "openWorldHint", false));
         def.put("securitySchemes", List.of(Map.of("type", "oauth2")));
         return def;
     }
@@ -709,7 +709,7 @@ public class McpToolHandler {
                 "required", List.of(),
                 "additionalProperties", false
         ));
-        def.put("annotations", Map.of("destructiveHint", false, "readOnlyHint", true));
+        def.put("annotations", Map.of("destructiveHint", false, "readOnlyHint", true, "openWorldHint", false));
         def.put("securitySchemes", List.of(Map.of("type", "oauth2")));
         return def;
     }
