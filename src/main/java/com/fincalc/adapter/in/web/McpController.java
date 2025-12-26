@@ -42,8 +42,29 @@ public class McpController {
     private final ObjectProvider<ChatGptRequestContext> requestContextProvider;
     private final AnalyticsService analyticsService;
 
+    /**
+     * Direct HTTP POST endpoint for MCP (used by ChatGPT).
+     * Handles JSON-RPC requests without requiring SSE session.
+     */
     @Operation(
-            summary = "Establish MCP connection",
+            summary = "Handle MCP request via HTTP POST",
+            description = "Direct JSON-RPC 2.0 endpoint for MCP communication (ChatGPT uses this)"
+    )
+    @ApiResponse(responseCode = "200", description = "Request processed")
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<JsonRpcResponse> handleDirectPost(@Valid @RequestBody JsonRpcRequest request) {
+        log.info("Direct MCP POST request: method={}", request.method());
+
+        // Track MCP request
+        analyticsService.trackMcpRequest();
+        analyticsService.trackMcpSession();
+
+        JsonRpcResponse response = processRequest(request);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(
+            summary = "Establish MCP connection (SSE)",
             description = "Opens a Server-Sent Events (SSE) connection for MCP communication. Returns an endpoint URL for sending messages."
     )
     @ApiResponse(responseCode = "200", description = "SSE connection established")
