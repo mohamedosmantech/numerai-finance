@@ -1,0 +1,13 @@
+# Development Environment Configuration
+server:
+  port: ${PORT:8002}
+
+logging:
+  level:
+    com.fincalc: DEBUG
+    org.springframework.web: INFO
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0

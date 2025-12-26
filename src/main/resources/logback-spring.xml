@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+
+    <springProperty scope="context" name="appName" source="spring.application.name" defaultValue="fincalc-pro"/>
+
+    <!-- Console appender for local/dev (human-readable) -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%X{traceId:-},%X{spanId:-}] [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- JSON appender for production (structured logging) -->
+    <appender name="JSON" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <includeMdcKeyName>traceId</includeMdcKeyName>
+            <includeMdcKeyName>spanId</includeMdcKeyName>
+            <includeMdcKeyName>requestId</includeMdcKeyName>
+            <includeMdcKeyName>userId</includeMdcKeyName>
+            <customFields>{"application":"${appName}"}</customFields>
+        </encoder>
+    </appender>
+
+    <!-- Local profile: human-readable console output -->
+    <springProfile name="local">
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+        <logger name="com.fincalc" level="DEBUG"/>
+    </springProfile>
+
+    <!-- Dev profile: human-readable with more detail -->
+    <springProfile name="dev">
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+        <logger name="com.fincalc" level="DEBUG"/>
+        <logger name="org.springframework.web" level="DEBUG"/>
+    </springProfile>
+
+    <!-- Production profile: JSON structured logging -->
+    <springProfile name="prod">
+        <root level="INFO">
+            <appender-ref ref="JSON"/>
+        </root>
+        <logger name="com.fincalc" level="INFO"/>
+        <logger name="org.springframework.web" level="WARN"/>
+    </springProfile>
+
+    <!-- Default (no profile): console output -->
+    <springProfile name="default">
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+        <logger name="com.fincalc" level="INFO"/>
+    </springProfile>
+</configuration>

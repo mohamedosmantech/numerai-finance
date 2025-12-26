@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fincalc-pro-config
+  namespace: fincalc
+  labels:
+    app: fincalc-pro
+data:
+  PORT: "8080"
+  LOG_LEVEL: "INFO"
+  SPRING_PROFILES_ACTIVE: "prod"
+  TRACING_SAMPLING_PROBABILITY: "0.1"

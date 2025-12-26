@@ -1,0 +1,32 @@
+# Build artifacts
+target/
+*.jar
+*.class
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Git
+.git/
+.gitignore
+
+# Node modules (widget build)
+widget/node_modules/
+widget/.pnpm-store/
+
+# Logs
+*.log
+logs/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Maven wrapper (will be copied explicitly)
+!.mvn/
+
+# Environment files
+.env
+*.env.local

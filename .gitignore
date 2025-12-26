@@ -1,0 +1,53 @@
+# Build output
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# IDE - IntelliJ
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+# IDE - Eclipse
+.classpath
+.project
+.settings/
+bin/
+
+# IDE - VS Code
+.vscode/
+
+# Local configuration (contains secrets/overrides)
+application-local.yml
+src/main/resources/application-local.yml
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+logs/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Node modules (widget)
+node_modules/
+
+# Maven wrapper (optional, uncomment if not committing)
+# .mvn/
+
+# OWASP dependency check reports
+dependency-check-report.*
+
+# Secrets and credentials
+*.pem
+*.key
+*.p12
+*.jks
+credentials.json
+secrets.yml
