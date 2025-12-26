@@ -29,23 +29,39 @@ public class CspFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        // Content Security Policy for OpenAI embedding
-        String csp = String.format(
-                "default-src 'self'; " +
-                "script-src 'self' 'unsafe-inline'; " +
-                "style-src 'self' 'unsafe-inline'; " +
-                "img-src 'self' data: https:; " +
-                "font-src 'self'; " +
-                "connect-src 'self' %s; " +
-                "frame-ancestors %s; " +
-                "base-uri 'self'; " +
-                "form-action 'self'",
-                connectSrc, frameAncestors
-        );
+        String requestUri = request.getRequestURI();
+        String csp;
+
+        // Relaxed CSP for admin dashboard (allows Bootstrap CDN)
+        if (requestUri.startsWith("/admin")) {
+            csp = "default-src 'self'; " +
+                  "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; " +
+                  "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; " +
+                  "font-src 'self' https://cdn.jsdelivr.net; " +
+                  "img-src 'self' data: https:; " +
+                  "connect-src 'self'; " +
+                  "frame-ancestors 'self'";
+        } else {
+            // Strict CSP for OpenAI/ChatGPT embedding
+            csp = String.format(
+                    "default-src 'self'; " +
+                    "script-src 'self' 'unsafe-inline'; " +
+                    "style-src 'self' 'unsafe-inline'; " +
+                    "img-src 'self' data: https:; " +
+                    "font-src 'self'; " +
+                    "connect-src 'self' %s; " +
+                    "frame-ancestors %s; " +
+                    "base-uri 'self'; " +
+                    "form-action 'self'",
+                    connectSrc, frameAncestors
+            );
+        }
 
         response.setHeader("Content-Security-Policy", csp);
         response.setHeader("X-Content-Type-Options", "nosniff");
-        response.setHeader("X-Frame-Options", "ALLOW-FROM https://chatgpt.com");
+        if (!requestUri.startsWith("/admin")) {
+            response.setHeader("X-Frame-Options", "ALLOW-FROM https://chatgpt.com");
+        }
         response.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
 
         filterChain.doFilter(request, response);

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: sidebar(${username})}"></nav>
+
+<div class="main-wrapper">
+    <header class="main-header">
+        <h1 class="page-title">Rate Providers</h1>
+        <span class="text-muted" th:text="${rateProviders != null ? rateProviders.size() + ' providers configured' : '0 providers'}">5 providers configured</span>
+    </header>
+
+    <main class="main-content">
+        <div class="row g-4">
+            <div class="col-md-6" th:each="provider : ${rateProviders}">
+                <div class="data-card">
+                    <div class="data-card-header">
+                        <div>
+                            <span class="badge bg-dark me-2" th:text="${provider.id()}">FRED</span>
+                            <strong th:text="${provider.name()}">Federal Reserve</strong>
+                        </div>
+                        <span th:if="${provider.enabled()}" class="badge bg-success">Active</span>
+                        <span th:unless="${provider.enabled()}" class="badge bg-danger">Inactive</span>
+                    </div>
+                    <div style="padding: 1.25rem;">
+                        <table class="table table-sm mb-0">
+                            <tr>
+                                <th style="width: 40%;">Type:</th>
+                                <td><span class="badge bg-info" th:text="${provider.type()}">FRED</span></td>
+                            </tr>
+                            <tr>
+                                <th>Base URL:</th>
+                                <td><small class="text-muted" th:text="${provider.baseUrl()}">https://api.stlouisfed.org</small></td>
+                            </tr>
+                            <tr>
+                                <th>API Key Env:</th>
+                                <td><code th:text="${provider.apiKeyEnvVar()}">FRED_API_KEY</code></td>
+                            </tr>
+                            <tr>
+                                <th>Cache Duration:</th>
+                                <td th:text="${provider.cacheDurationMinutes() + ' minutes'}">60 minutes</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<div th:replace="~{fragments/layout :: scripts}"></div>
+</body>
+</html>

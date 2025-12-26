@@ -1,6 +1,7 @@
 package com.fincalc.adapter.in.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fincalc.adapter.config.ChatGptRequestContext;
 import com.fincalc.adapter.in.web.dto.JsonRpcRequest;
 import com.fincalc.adapter.in.web.dto.JsonRpcResponse;
 import com.fincalc.application.McpToolHandler;
@@ -14,6 +15,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +38,7 @@ public class McpController {
 
     private final McpToolHandler toolHandler;
     private final ObjectMapper objectMapper;
+    private final ObjectProvider<ChatGptRequestContext> requestContextProvider;
 
     @Operation(
             summary = "Establish MCP connection",
@@ -145,7 +148,9 @@ public class McpController {
             return JsonRpcResponse.invalidParams(id, "Tool name is required");
         }
 
-        Map<String, Object> result = toolHandler.executeTool(toolName, arguments);
+        // Get request context for ChatGPT headers (country, language)
+        ChatGptRequestContext context = requestContextProvider.getIfAvailable();
+        Map<String, Object> result = toolHandler.executeTool(toolName, arguments, context);
         return JsonRpcResponse.success(id, result);
     }
 

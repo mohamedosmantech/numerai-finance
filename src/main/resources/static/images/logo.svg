@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#06b6d4"/>
+      <stop offset="50%" style="stop-color:#4f46e5"/>
+      <stop offset="100%" style="stop-color:#7c3aed"/>
+    </linearGradient>
+    <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981"/>
+      <stop offset="100%" style="stop-color:#06b6d4"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background Circle -->
+  <circle cx="100" cy="100" r="90" fill="url(#logoGradient)"/>
+
+  <!-- Calculator Body -->
+  <rect x="55" y="45" width="90" height="110" rx="12" fill="white" opacity="0.95"/>
+
+  <!-- Display Screen -->
+  <rect x="65" y="55" width="70" height="30" rx="6" fill="#1e293b"/>
+  <text x="125" y="78" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#10b981" text-anchor="end">$2,025</text>
+
+  <!-- Calculator Buttons -->
+  <!-- Row 1 -->
+  <rect x="65" y="95" width="15" height="15" rx="3" fill="#e2e8f0"/>
+  <rect x="85" y="95" width="15" height="15" rx="3" fill="#e2e8f0"/>
+  <rect x="105" y="95" width="15" height="15" rx="3" fill="#e2e8f0"/>
+  <rect x="125" y="95" width="15" height="15" rx="3" fill="url(#accentGradient)"/>
+
+  <!-- Row 2 -->
+  <rect x="65" y="115" width="15" height="15" rx="3" fill="#e2e8f0"/>
+  <rect x="85" y="115" width="15" height="15" rx="3" fill="#e2e8f0"/>
+  <rect x="105" y="115" width="15" height="15" rx="3" fill="#e2e8f0"/>
+  <rect x="125" y="115" width="15" height="15" rx="3" fill="url(#accentGradient)"/>
+
+  <!-- Row 3 -->
+  <rect x="65" y="135" width="15" height="15" rx="3" fill="#e2e8f0"/>
+  <rect x="85" y="135" width="15" height="15" rx="3" fill="#e2e8f0"/>
+  <rect x="105" y="135" width="15" height="15" rx="3" fill="#e2e8f0"/>
+  <rect x="125" y="135" width="15" height="15" rx="3" fill="#4f46e5"/>
+
+  <!-- Chart Lines (Financial Growth) -->
+  <path d="M160 130 L170 100 L180 110 L190 70" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.8"/>
+  <circle cx="190" cy="70" r="4" fill="#10b981"/>
+
+  <!-- Dollar Sign Accent -->
+  <circle cx="45" cy="55" r="18" fill="white" opacity="0.9"/>
+  <text x="45" y="62" font-family="Arial, sans-serif" font-size="22" font-weight="bold" fill="#4f46e5" text-anchor="middle">$</text>
+</svg>

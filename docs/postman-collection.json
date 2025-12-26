@@ -1,0 +1,181 @@
+{
+  "info": {
+    "name": "Numerai Finance API",
+    "description": "Smart Financial Intelligence - MCP Server for ChatGPT",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8002",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health & Discovery",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/actuator/health",
+            "description": "Check if the server is running and healthy"
+          }
+        },
+        {
+          "name": "OAuth Protected Resource",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/.well-known/oauth-protected-resource",
+            "description": "OAuth 2.0 protected resource metadata for OpenAI discovery"
+          }
+        },
+        {
+          "name": "MCP Server Metadata",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/.well-known/mcp-server",
+            "description": "MCP server capabilities and tool list"
+          }
+        },
+        {
+          "name": "OpenAPI Docs",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api-docs",
+            "description": "OpenAPI 3.0 specification"
+          }
+        }
+      ]
+    },
+    {
+      "name": "MCP Protocol",
+      "item": [
+        {
+          "name": "SSE Connection",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/mcp",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/event-stream"
+              }
+            ],
+            "description": "Establish SSE connection. Returns sessionId for subsequent requests."
+          }
+        },
+        {
+          "name": "List Tools",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/mcp/messages?sessionId={{sessionId}}",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"jsonrpc\": \"2.0\",\n  \"id\": 1,\n  \"method\": \"tools/list\"\n}"
+            },
+            "description": "Get list of available tools and their schemas"
+          }
+        },
+        {
+          "name": "Calculate Loan Payment",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/mcp/messages?sessionId={{sessionId}}",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"jsonrpc\": \"2.0\",\n  \"id\": 2,\n  \"method\": \"tools/call\",\n  \"params\": {\n    \"name\": \"calculate_loan_payment\",\n    \"arguments\": {\n      \"principal\": 300000,\n      \"annualRate\": 6.5,\n      \"years\": 30\n    }\n  }\n}"
+            },
+            "description": "Calculate monthly mortgage/loan payment with amortization details"
+          }
+        },
+        {
+          "name": "Calculate Compound Interest",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/mcp/messages?sessionId={{sessionId}}",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"jsonrpc\": \"2.0\",\n  \"id\": 3,\n  \"method\": \"tools/call\",\n  \"params\": {\n    \"name\": \"calculate_compound_interest\",\n    \"arguments\": {\n      \"principal\": 10000,\n      \"annualRate\": 7,\n      \"years\": 20,\n      \"compoundingFrequency\": 12,\n      \"monthlyContribution\": 500\n    }\n  }\n}"
+            },
+            "description": "Calculate investment growth with compound interest and monthly contributions"
+          }
+        },
+        {
+          "name": "Estimate Taxes",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/mcp/messages?sessionId={{sessionId}}",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"jsonrpc\": \"2.0\",\n  \"id\": 4,\n  \"method\": \"tools/call\",\n  \"params\": {\n    \"name\": \"estimate_taxes\",\n    \"arguments\": {\n      \"grossIncome\": 100000,\n      \"filingStatus\": \"single\",\n      \"deductions\": 0,\n      \"state\": \"CA\"\n    }\n  }\n}"
+            },
+            "description": "Estimate US federal and state income taxes for 2024"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Static Pages",
+      "item": [
+        {
+          "name": "Landing Page",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/",
+            "description": "Numerai Finance landing page"
+          }
+        },
+        {
+          "name": "Privacy Policy",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/privacy-policy.html",
+            "description": "Privacy policy for ChatGPT Apps submission"
+          }
+        },
+        {
+          "name": "Terms of Service",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/terms.html",
+            "description": "Terms of service"
+          }
+        },
+        {
+          "name": "Swagger UI",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/swagger-ui.html",
+            "description": "Interactive API documentation"
+          }
+        }
+      ]
+    }
+  ]
+}

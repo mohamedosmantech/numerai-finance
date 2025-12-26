@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: 042-upsert-more-rate-providers
+      author: Mohamed Osman
+      changes:
+        - sql:
+            sql: |
+              INSERT INTO rate_providers (id, name, type, base_url, api_key_env_var, cache_duration_minutes, enabled, series_mapping_json)
+              VALUES
+                ('BOJ', 'Bank of Japan', 'BOJ', 'https://www.stat-search.boj.or.jp', '', 60, true, '{"CENTRAL_BANK_RATE":"IR01_MABASE1"}'),
+                ('BOK', 'Bank of Korea', 'BOK', 'https://ecos.bok.or.kr/api', 'BOK_API_KEY', 60, true, '{"CENTRAL_BANK_RATE":"722Y001"}'),
+                ('RBI', 'Reserve Bank of India', 'RBI', 'https://rbidocs.rbi.org.in/rdocs', '', 60, true, '{"CENTRAL_BANK_RATE":"REPO_RATE"}'),
+                ('BCB', 'Banco Central do Brasil', 'BCB', 'https://api.bcb.gov.br/dados/serie/bcdata.sgs', '', 60, true, '{"CENTRAL_BANK_RATE":"432"}'),
+                ('BANXICO', 'Banco de Mexico', 'BANXICO', 'https://www.banxico.org.mx/SieAPIRest/service/v1', 'BANXICO_API_KEY', 60, true, '{"CENTRAL_BANK_RATE":"SF61745"}'),
+                ('SNB', 'Swiss National Bank', 'SNB', 'https://data.snb.ch/api/cube', '', 60, true, '{"CENTRAL_BANK_RATE":"ZIMOCHF"}'),
+                ('Riksbank', 'Sveriges Riksbank', 'Riksbank', 'https://api.riksbank.se/swea/v1', '', 60, true, '{"CENTRAL_BANK_RATE":"SECBREPOEFF"}'),
+                ('Norges Bank', 'Norges Bank', 'NB', 'https://data.norges-bank.no/api/data', '', 60, true, '{"CENTRAL_BANK_RATE":"IR.FOLIO"}'),
+                ('Danmarks Nationalbank', 'Danmarks Nationalbank', 'DNB', 'https://api.nationalbanken.dk', '', 60, true, '{"CENTRAL_BANK_RATE":"DNRENTA"}'),
+                ('RBNZ', 'Reserve Bank of New Zealand', 'RBNZ', 'https://www.rbnz.govt.nz/api', '', 60, true, '{"CENTRAL_BANK_RATE":"B1"}'),
+                ('MAS', 'Monetary Authority of Singapore', 'MAS', 'https://eservices.mas.gov.sg/api', '', 60, true, '{"CENTRAL_BANK_RATE":"domestic_interest_rates"}'),
+                ('HKMA', 'Hong Kong Monetary Authority', 'HKMA', 'https://api.hkma.gov.hk/public', '', 60, true, '{"CENTRAL_BANK_RATE":"base_rate"}'),
+                ('NBP', 'National Bank of Poland', 'NBP', 'https://api.nbp.pl/api', '', 60, true, '{"CENTRAL_BANK_RATE":"ref_rate"}')
+              ON CONFLICT (id) DO NOTHING;

@@ -1,0 +1,156 @@
+databaseChangeLog:
+  - changeSet:
+      id: 010-seed-currencies
+      author: Mohamed Osman
+      context: "!test"
+      changes:
+        - insert:
+            tableName: currencies
+            columns:
+              - column: { name: code, value: "USD" }
+              - column: { name: symbol, value: "$" }
+              - column: { name: name, value: "US Dollar" }
+              - column: { name: decimal_places, valueNumeric: 2 }
+              - column: { name: symbol_before, valueBoolean: true }
+              - column: { name: thousands_separator, value: "," }
+              - column: { name: decimal_separator, value: "." }
+        - insert:
+            tableName: currencies
+            columns:
+              - column: { name: code, value: "EUR" }
+              - column: { name: symbol, value: "EUR" }
+              - column: { name: name, value: "Euro" }
+              - column: { name: decimal_places, valueNumeric: 2 }
+              - column: { name: symbol_before, valueBoolean: false }
+              - column: { name: thousands_separator, value: "." }
+              - column: { name: decimal_separator, value: "," }
+        - insert:
+            tableName: currencies
+            columns:
+              - column: { name: code, value: "GBP" }
+              - column: { name: symbol, value: "GBP" }
+              - column: { name: name, value: "British Pound" }
+              - column: { name: decimal_places, valueNumeric: 2 }
+              - column: { name: symbol_before, valueBoolean: true }
+              - column: { name: thousands_separator, value: "," }
+              - column: { name: decimal_separator, value: "." }
+        - insert:
+            tableName: currencies
+            columns:
+              - column: { name: code, value: "JPY" }
+              - column: { name: symbol, value: "JPY" }
+              - column: { name: name, value: "Japanese Yen" }
+              - column: { name: decimal_places, valueNumeric: 0 }
+              - column: { name: symbol_before, valueBoolean: true }
+              - column: { name: thousands_separator, value: "," }
+              - column: { name: decimal_separator, value: "." }
+        - insert:
+            tableName: currencies
+            columns:
+              - column: { name: code, value: "CAD" }
+              - column: { name: symbol, value: "C$" }
+              - column: { name: name, value: "Canadian Dollar" }
+              - column: { name: decimal_places, valueNumeric: 2 }
+              - column: { name: symbol_before, valueBoolean: true }
+              - column: { name: thousands_separator, value: "," }
+              - column: { name: decimal_separator, value: "." }
+        - insert:
+            tableName: currencies
+            columns:
+              - column: { name: code, value: "AUD" }
+              - column: { name: symbol, value: "A$" }
+              - column: { name: name, value: "Australian Dollar" }
+              - column: { name: decimal_places, valueNumeric: 2 }
+              - column: { name: symbol_before, valueBoolean: true }
+              - column: { name: thousands_separator, value: "," }
+              - column: { name: decimal_separator, value: "." }
+        - insert:
+            tableName: currencies
+            columns:
+              - column: { name: code, value: "CHF" }
+              - column: { name: symbol, value: "Fr." }
+              - column: { name: name, value: "Swiss Franc" }
+              - column: { name: decimal_places, valueNumeric: 2 }
+              - column: { name: symbol_before, valueBoolean: false }
+              - column: { name: thousands_separator, value: "'" }
+              - column: { name: decimal_separator, value: "." }
+        - insert:
+            tableName: currencies
+            columns:
+              - column: { name: code, value: "CNY" }
+              - column: { name: symbol, value: "CNY" }
+              - column: { name: name, value: "Chinese Yuan" }
+              - column: { name: decimal_places, valueNumeric: 2 }
+              - column: { name: symbol_before, valueBoolean: true }
+              - column: { name: thousands_separator, value: "," }
+              - column: { name: decimal_separator, value: "." }
+        - insert:
+            tableName: currencies
+            columns:
+              - column: { name: code, value: "INR" }
+              - column: { name: symbol, value: "INR" }
+              - column: { name: name, value: "Indian Rupee" }
+              - column: { name: decimal_places, valueNumeric: 2 }
+              - column: { name: symbol_before, valueBoolean: true }
+              - column: { name: thousands_separator, value: "," }
+              - column: { name: decimal_separator, value: "." }
+        - insert:
+            tableName: currencies
+            columns:
+              - column: { name: code, value: "MXN" }
+              - column: { name: symbol, value: "$" }
+              - column: { name: name, value: "Mexican Peso" }
+              - column: { name: decimal_places, valueNumeric: 2 }
+              - column: { name: symbol_before, valueBoolean: true }
+              - column: { name: thousands_separator, value: "," }
+              - column: { name: decimal_separator, value: "." }
+        - insert:
+            tableName: currencies
+            columns:
+              - column: { name: code, value: "BRL" }
+              - column: { name: symbol, value: "R$" }
+              - column: { name: name, value: "Brazilian Real" }
+              - column: { name: decimal_places, valueNumeric: 2 }
+              - column: { name: symbol_before, valueBoolean: true }
+              - column: { name: thousands_separator, value: "." }
+              - column: { name: decimal_separator, value: "," }
+        - insert:
+            tableName: currencies
+            columns:
+              - column: { name: code, value: "AED" }
+              - column: { name: symbol, value: "AED" }
+              - column: { name: name, value: "UAE Dirham" }
+              - column: { name: decimal_places, valueNumeric: 2 }
+              - column: { name: symbol_before, valueBoolean: true }
+              - column: { name: thousands_separator, value: "," }
+              - column: { name: decimal_separator, value: "." }
+        - insert:
+            tableName: currencies
+            columns:
+              - column: { name: code, value: "SAR" }
+              - column: { name: symbol, value: "SAR" }
+              - column: { name: name, value: "Saudi Riyal" }
+              - column: { name: decimal_places, valueNumeric: 2 }
+              - column: { name: symbol_before, valueBoolean: true }
+              - column: { name: thousands_separator, value: "," }
+              - column: { name: decimal_separator, value: "." }
+        - insert:
+            tableName: currencies
+            columns:
+              - column: { name: code, value: "SGD" }
+              - column: { name: symbol, value: "S$" }
+              - column: { name: name, value: "Singapore Dollar" }
+              - column: { name: decimal_places, valueNumeric: 2 }
+              - column: { name: symbol_before, valueBoolean: true }
+              - column: { name: thousands_separator, value: "," }
+              - column: { name: decimal_separator, value: "." }
+        - insert:
+            tableName: currencies
+            columns:
+              - column: { name: code, value: "KRW" }
+              - column: { name: symbol, value: "KRW" }
+              - column: { name: name, value: "South Korean Won" }
+              - column: { name: decimal_places, valueNumeric: 0 }
+              - column: { name: symbol_before, valueBoolean: true }
+              - column: { name: thousands_separator, value: "," }
+              - column: { name: decimal_separator, value: "." }

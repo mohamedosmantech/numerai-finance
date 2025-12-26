@@ -1,0 +1,30 @@
+databaseChangeLog:
+  - changeSet:
+      id: 040-upsert-more-currencies
+      author: Mohamed Osman
+      changes:
+        - sql:
+            sql: |
+              INSERT INTO currencies (code, symbol, name, decimal_places, symbol_before, thousands_separator, decimal_separator)
+              VALUES
+                ('NZD', 'NZ$', 'New Zealand Dollar', 2, true, ',', '.'),
+                ('HKD', 'HK$', 'Hong Kong Dollar', 2, true, ',', '.'),
+                ('SEK', 'kr', 'Swedish Krona', 2, false, ' ', ','),
+                ('NOK', 'kr', 'Norwegian Krone', 2, false, ' ', ','),
+                ('DKK', 'kr', 'Danish Krone', 2, false, '.', ','),
+                ('PLN', 'zl', 'Polish Zloty', 2, false, ' ', ','),
+                ('THB', 'B', 'Thai Baht', 2, true, ',', '.'),
+                ('IDR', 'Rp', 'Indonesian Rupiah', 0, true, '.', ','),
+                ('MYR', 'RM', 'Malaysian Ringgit', 2, true, ',', '.'),
+                ('PHP', 'P', 'Philippine Peso', 2, true, ',', '.'),
+                ('TRY', 'TL', 'Turkish Lira', 2, true, '.', ','),
+                ('RUB', 'R', 'Russian Ruble', 2, false, ' ', ','),
+                ('ZAR', 'R', 'South African Rand', 2, true, ' ', ','),
+                ('ILS', 'S', 'Israeli Shekel', 2, true, ',', '.'),
+                ('EGP', 'EP', 'Egyptian Pound', 2, true, ',', '.'),
+                ('CZK', 'Kc', 'Czech Koruna', 2, false, ' ', ','),
+                ('HUF', 'Ft', 'Hungarian Forint', 0, false, ' ', ','),
+                ('CLP', '$', 'Chilean Peso', 0, true, '.', ','),
+                ('COP', '$', 'Colombian Peso', 0, true, '.', ','),
+                ('ARS', '$', 'Argentine Peso', 2, true, '.', ',')
+              ON CONFLICT (code) DO NOTHING;

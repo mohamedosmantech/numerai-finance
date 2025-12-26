@@ -1,96 +1,92 @@
 # Numerai Finance
 
-**Smart Financial Intelligence for ChatGPT** - Professional-grade financial calculations powered by AI.
+**Smart Financial Intelligence for ChatGPT** - Professional-grade financial calculations that AI alone can't reliably provide.
+
+## Why Numerai Finance?
+
+| Raw ChatGPT | Numerai Finance |
+|-------------|-----------------|
+| May estimate "around $1,900" | Exact: $1,896.20 |
+| Tax brackets from training (outdated) | 2025 official rates |
+| Static rate guesses | Live Federal Reserve data |
+| No audit trail | Full calculation logging |
+| English only | 6 languages |
+| Can't customize | Admin dashboard |
 
 ## Features
 
-- **Mortgage & Loan Analysis** - Calculate monthly payments, total interest, and amortization schedules
-- **Investment Growth Projector** - Compound interest with optional monthly contributions for wealth planning
-- **Smart Tax Estimator (2024)** - US federal and state income tax calculations with all filing statuses
+- **Mortgage & Loan Calculator** - Exact payments, amortization
+- **Investment Growth Projector** - Compound interest with contributions
+- **Smart Tax Estimator** - 2025 US federal + state taxes
+- **Live Market Rates** - Real-time from Federal Reserve
+- **Admin Dashboard** - Manage countries, currencies, messages via web UI
+- **Database Migrations** - Liquibase for schema versioning
+
+## Global Support
+
+**Countries**: US, UK, Canada, Germany, Australia (extensible)
+**Currencies**: USD, EUR, GBP, JPY, CAD, AUD, CHF, CNY, INR, and more
+**Languages**: English, Spanish, French, German, Chinese, Arabic
 
 ## Quick Start
 
-### Prerequisites
-- Java 21+
-- Maven 3.9+
-
-### Run Locally
 ```bash
 ./mvnw spring-boot:run
 ```
-
-Server starts at `http://localhost:8002`
-
-### Run Tests
-```bash
-./mvnw test
-```
-
-### Build Docker Image
-```bash
-docker build -t numerai-finance .
-docker run -p 8002:8002 numerai-finance
-```
+Server: `http://localhost:8002`
 
 ## API Endpoints
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/mcp` | GET | SSE connection for MCP protocol |
-| `/mcp/messages?sessionId=xxx` | POST | JSON-RPC messages |
-| `/actuator/health` | GET | Health check |
-| `/swagger-ui.html` | GET | API Documentation |
-| `/widget/index.html` | GET | Interactive demo |
+| Endpoint | Description |
+|----------|-------------|
+| `/mcp` | MCP/ChatGPT connection |
+| `/api/rates` | Live market rates |
+| `/api/admin/config/*` | Admin REST API |
+| `/admin` | Admin Dashboard UI |
+| `/h2-console` | Database Console (dev) |
+| `/swagger-ui.html` | Interactive API docs |
 
-## MCP Tools
+## Admin Dashboard
 
-### calculate_loan_payment
-```json
-{
-  "principal": 300000,
-  "annualRate": 6.5,
-  "years": 30
-}
+Access at `/admin` to manage:
+- **Countries & Tax Systems** - Add countries, configure 2025 tax brackets
+- **Currencies & Formatting** - 15+ currencies with custom symbols/separators
+- **Rate Providers** - FRED, ECB, BOE, BOC, RBA integrations
+- **Localized Messages** - 6 languages (EN, ES, FR, DE, ZH, AR)
+- **Response Templates** - Customize tool output formats
+
+## Architecture
+
+**Hexagonal Architecture** with extensibility built-in:
+
 ```
+domain/
+├── model/config/    # Country, Currency, RateProvider, LocalizedMessage
+├── port/in/         # Use case interfaces
+└── port/out/        # ConfigurationPort, MarketRatePort
 
-### calculate_compound_interest
-```json
-{
-  "principal": 10000,
-  "annualRate": 7,
-  "years": 20,
-  "compoundingFrequency": 12,
-  "monthlyContribution": 500
-}
-```
-
-### estimate_taxes
-```json
-{
-  "grossIncome": 100000,
-  "filingStatus": "single",
-  "deductions": 0,
-  "state": "CA"
-}
+adapter/
+├── in/web/          # Controllers (MCP, Rates, Admin)
+└── out/             # FRED API, InMemory/Database adapters
 ```
 
 ## Deployment
 
-### Railway (Recommended)
 ```bash
+# Railway (recommended)
 railway init && railway up
+
+# Docker
+docker build -t numerai-finance .
+docker run -p 8002:8002 numerai-finance
 ```
 
-### Docker Compose
-```bash
-docker-compose up --build
-```
+## Documentation
 
-## Architecture
-
-Built with **Hexagonal Architecture** (Ports & Adapters) following SOLID principles.
-
-See [docs/ARCHITECTURE_EXPLAINED.md](docs/ARCHITECTURE_EXPLAINED.md) for details.
+- [API Reference](docs/API.md)
+- [Architecture](docs/ARCHITECTURE_EXPLAINED.md)
+- [Submission Guide](docs/SUBMISSION_GUIDE.md)
+- [Postman Collection](docs/postman-collection.json)
 
 ## License
 

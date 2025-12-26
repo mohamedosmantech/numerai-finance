@@ -1,0 +1,27 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/changes/001-create-currencies-table.yaml
+  - include:
+      file: db/changelog/changes/002-create-countries-table.yaml
+  - include:
+      file: db/changelog/changes/003-create-rate-providers-table.yaml
+  - include:
+      file: db/changelog/changes/004-create-localized-messages-table.yaml
+  - include:
+      file: db/changelog/changes/005-create-response-templates-table.yaml
+  - include:
+      file: db/changelog/changes/010-seed-currencies.yaml
+  - include:
+      file: db/changelog/changes/011-seed-countries.yaml
+  - include:
+      file: db/changelog/changes/012-seed-rate-providers.yaml
+  - include:
+      file: db/changelog/changes/013-seed-localized-messages.yaml
+  - include:
+      file: db/changelog/changes/040-upsert-more-currencies.yaml
+  - include:
+      file: db/changelog/changes/041-upsert-more-countries.yaml
+  - include:
+      file: db/changelog/changes/042-upsert-more-rate-providers.yaml
+  - include:
+      file: db/changelog/changes/043-upsert-more-localized-messages.yaml

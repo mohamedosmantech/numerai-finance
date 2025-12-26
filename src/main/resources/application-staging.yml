@@ -1,0 +1,67 @@
+# Staging Environment Configuration
+# Usage: SPRING_PROFILES_ACTIVE=staging
+# Mirrors production but with more logging and relaxed security for testing
+
+server:
+  port: ${PORT:8080}
+  tomcat:
+    threads:
+      max: 100
+      min-spare: 10
+
+spring:
+  # PostgreSQL for staging
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/numerai_staging}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+
+  # Enable template caching like production
+  thymeleaf:
+    cache: true
+
+  # H2 Console disabled in staging
+  h2:
+    console:
+      enabled: false
+
+# Moderate logging - more than prod, less than dev
+logging:
+  level:
+    com.fincalc: INFO
+    org.springframework.web: INFO
+    org.springframework.security: WARN
+    org.hibernate.SQL: WARN
+    liquibase: INFO
+
+# Actuator - expose health and metrics only
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when_authorized
+  tracing:
+    sampling:
+      probability: 0.5
+
+# Staging admin credentials (from env vars, with fallback)
+fincalc:
+  admin:
+    username: ${ADMIN_USERNAME:staging_admin}
+    password: ${ADMIN_PASSWORD:StagingPass2025!}
+
+  # CSP for staging domain
+  csp:
+    frame-ancestors: ${CSP_FRAME_ANCESTORS:https://chatgpt.com https://*.openai.com}

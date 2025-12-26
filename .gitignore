@@ -7,7 +7,7 @@ target/
 *.iml
 *.ipr
 *.iws
-out/
+/out/
 
 # IDE - Eclipse
 .classpath
@@ -51,3 +51,6 @@ dependency-check-report.*
 *.jks
 credentials.json
 secrets.yml
+
+# Local database files
+data/

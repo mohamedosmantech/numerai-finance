@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: sidebar(${username})}"></nav>
+
+<div class="main-wrapper">
+    <header class="main-header">
+        <h1 class="page-title">Currencies</h1>
+        <span class="text-muted" th:text="${currencies != null ? currencies.size() + ' currencies configured' : '0 currencies'}">15 currencies configured</span>
+    </header>
+
+    <main class="main-content">
+        <div class="data-card">
+            <div class="data-card-header">
+                <h5 class="data-card-title">Supported Currencies</h5>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Symbol</th>
+                        <th>Name</th>
+                        <th>Decimals</th>
+                        <th>Format</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="c : ${currencies}">
+                        <td><span class="badge bg-success" th:text="${c.code()}">USD</span></td>
+                        <td class="fs-4" th:text="${c.symbol()}">$</td>
+                        <td th:text="${c.name()}">US Dollar</td>
+                        <td th:text="${c.decimalPlaces()}">2</td>
+                        <td>
+                            <span th:if="${c.symbolBefore()}" class="badge bg-info">Symbol First</span>
+                            <span th:unless="${c.symbolBefore()}" class="badge bg-warning text-dark">Symbol After</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</div>
+
+<div th:replace="~{fragments/layout :: scripts}"></div>
+</body>
+</html>

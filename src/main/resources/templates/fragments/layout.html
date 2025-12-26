@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="head">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Numerai Finance - Admin Dashboard</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #4338ca;
+            --sidebar-bg: #1e1b4b;
+            --sidebar-hover: #312e81;
+            --accent: #06b6d4;
+        }
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f1f5f9;
+            margin: 0;
+        }
+        .sidebar {
+            background: linear-gradient(180deg, var(--sidebar-bg) 0%, #312e81 100%);
+            min-height: 100vh;
+            padding: 0;
+            position: fixed;
+            width: 260px;
+            box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+        }
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+        .logo-text {
+            color: white;
+        }
+        .logo-text h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin: 0;
+        }
+        .logo-text span {
+            font-size: 0.75rem;
+            opacity: 0.7;
+        }
+        .nav-section {
+            padding: 1rem 0;
+        }
+        .nav-section-title {
+            padding: 0.5rem 1.5rem;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255,255,255,0.4);
+            font-weight: 600;
+        }
+        .sidebar .nav-link {
+            color: rgba(255,255,255,0.7);
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+        .sidebar .nav-link:hover {
+            background: var(--sidebar-hover);
+            color: white;
+            border-left-color: var(--accent);
+        }
+        .sidebar .nav-link.active {
+            background: var(--sidebar-hover);
+            color: white;
+            border-left-color: var(--accent);
+        }
+        .sidebar .nav-link i {
+            font-size: 1.1rem;
+            width: 24px;
+        }
+        .user-section {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            background: rgba(0,0,0,0.2);
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+        .user-details {
+            flex: 1;
+        }
+        .user-name {
+            color: white;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        .user-role {
+            color: rgba(255,255,255,0.5);
+            font-size: 0.75rem;
+        }
+        .main-wrapper {
+            margin-left: 260px;
+        }
+        .main-header {
+            background: white;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin: 0;
+        }
+        .main-content {
+            padding: 2rem;
+        }
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .stat-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        .stat-icon.blue { background: #dbeafe; color: #2563eb; }
+        .stat-icon.green { background: #dcfce7; color: #16a34a; }
+        .stat-icon.purple { background: #f3e8ff; color: #9333ea; }
+        .stat-icon.orange { background: #ffedd5; color: #ea580c; }
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+        .stat-label {
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+        .data-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .data-card-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .data-card-title {
+            font-weight: 600;
+            color: #1e293b;
+            margin: 0;
+        }
+        .table {
+            margin: 0;
+        }
+        .table th {
+            background: #f8fafc;
+            font-weight: 600;
+            color: #475569;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 1rem 1.5rem;
+        }
+        .table td {
+            padding: 1rem 1.5rem;
+            vertical-align: middle;
+            color: #334155;
+        }
+        .badge {
+            font-weight: 500;
+            padding: 0.35em 0.75em;
+        }
+    </style>
+</head>
+
+<nav th:fragment="sidebar(username)" class="sidebar">
+    <div class="sidebar-header">
+        <div class="logo-container">
+            <img src="/images/logo-dark.svg" alt="Numerai Finance" style="width: 45px; height: 45px; border-radius: 12px;">
+            <div class="logo-text">
+                <h1>Numerai Finance</h1>
+                <span>Admin Console</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="nav-section">
+        <div class="nav-section-title">Main Menu</div>
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link" href="/admin">
+                    <i class="bi bi-grid-1x2-fill"></i> Dashboard
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/admin/countries">
+                    <i class="bi bi-globe-americas"></i> Countries
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/admin/currencies">
+                    <i class="bi bi-currency-exchange"></i> Currencies
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/admin/messages">
+                    <i class="bi bi-translate"></i> Messages
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/admin/rate-providers">
+                    <i class="bi bi-graph-up-arrow"></i> Rate Providers
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="nav-section">
+        <div class="nav-section-title">Resources</div>
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link" href="/swagger-ui/index.html" target="_blank">
+                    <i class="bi bi-file-earmark-code"></i> API Docs
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/" target="_blank">
+                    <i class="bi bi-house"></i> Landing Page
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="user-section">
+        <div class="user-info">
+            <div class="user-avatar" th:text="${username != null ? username.substring(0,1).toUpperCase() : 'A'}">A</div>
+            <div class="user-details">
+                <div class="user-name" th:text="${username != null ? username : 'Admin'}">Admin</div>
+                <div class="user-role">Administrator</div>
+            </div>
+            <a href="/admin/logout" class="text-white-50" title="Logout">
+                <i class="bi bi-box-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</nav>
+
+<footer th:fragment="scripts">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</footer>
+</html>

@@ -1,0 +1,49 @@
+databaseChangeLog:
+  - changeSet:
+      id: 005-create-response-templates-table
+      author: Mohamed Osman
+      changes:
+        - createTable:
+            tableName: response_templates
+            columns:
+              - column:
+                  name: id
+                  type: VARCHAR(150)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: tool_name
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: country_code
+                  type: VARCHAR(2)
+              - column:
+                  name: language_code
+                  type: VARCHAR(5)
+                  defaultValue: "en"
+              - column:
+                  name: fields_json
+                  type: TEXT
+              - column:
+                  name: header_template
+                  type: VARCHAR(500)
+              - column:
+                  name: footer_template
+                  type: VARCHAR(500)
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+        - createIndex:
+            indexName: idx_templates_tool_name
+            tableName: response_templates
+            columns:
+              - column:
+                  name: tool_name

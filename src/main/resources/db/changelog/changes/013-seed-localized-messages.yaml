@@ -1,0 +1,110 @@
+databaseChangeLog:
+  - changeSet:
+      id: 013-seed-localized-messages
+      author: Mohamed Osman
+      context: "!test"
+      changes:
+        - insert:
+            tableName: localized_messages
+            columns:
+              - column: { name: message_key, value: "loan.title" }
+              - column: { name: category, value: "tool_response" }
+              - column:
+                  name: translations_json
+                  value: '{"en":"Loan Payment Summary","es":"Resumen del Pago del Prestamo","fr":"Resume du Paiement du Pret","de":"Zusammenfassung der Darlehenszahlung","zh":"贷款支付摘要","ar":"ملخص دفع القرض"}'
+        - insert:
+            tableName: localized_messages
+            columns:
+              - column: { name: message_key, value: "loan.monthlyPayment" }
+              - column: { name: category, value: "field_label" }
+              - column:
+                  name: translations_json
+                  value: '{"en":"Monthly Payment","es":"Pago Mensual","fr":"Paiement Mensuel","de":"Monatliche Zahlung","zh":"月供","ar":"الدفعة الشهرية"}'
+        - insert:
+            tableName: localized_messages
+            columns:
+              - column: { name: message_key, value: "loan.totalPayment" }
+              - column: { name: category, value: "field_label" }
+              - column:
+                  name: translations_json
+                  value: '{"en":"Total Payment","es":"Pago Total","fr":"Paiement Total","de":"Gesamtzahlung","zh":"总付款","ar":"إجمالي الدفع"}'
+        - insert:
+            tableName: localized_messages
+            columns:
+              - column: { name: message_key, value: "loan.totalInterest" }
+              - column: { name: category, value: "field_label" }
+              - column:
+                  name: translations_json
+                  value: '{"en":"Total Interest","es":"Interes Total","fr":"Interet Total","de":"Gesamtzinsen","zh":"总利息","ar":"إجمالي الفائدة"}'
+        - insert:
+            tableName: localized_messages
+            columns:
+              - column: { name: message_key, value: "investment.title" }
+              - column: { name: category, value: "tool_response" }
+              - column:
+                  name: translations_json
+                  value: '{"en":"Investment Growth Summary","es":"Resumen de Crecimiento de Inversion","fr":"Resume de Croissance de Investissement","de":"Zusammenfassung des Investitionswachstums","zh":"投资增长摘要","ar":"ملخص نمو الاستثمار"}'
+        - insert:
+            tableName: localized_messages
+            columns:
+              - column: { name: message_key, value: "investment.futureValue" }
+              - column: { name: category, value: "field_label" }
+              - column:
+                  name: translations_json
+                  value: '{"en":"Future Value","es":"Valor Futuro","fr":"Valeur Future","de":"Zukünftiger Wert","zh":"未来价值","ar":"القيمة المستقبلية"}'
+        - insert:
+            tableName: localized_messages
+            columns:
+              - column: { name: message_key, value: "tax.title" }
+              - column: { name: category, value: "tool_response" }
+              - column:
+                  name: translations_json
+                  value: '{"en":"Tax Estimation","es":"Estimacion de Impuestos","fr":"Estimation Fiscale","de":"Steuerberechnung","zh":"税务估算","ar":"تقدير الضريبة"}'
+        - insert:
+            tableName: localized_messages
+            columns:
+              - column: { name: message_key, value: "tax.federalTax" }
+              - column: { name: category, value: "field_label" }
+              - column:
+                  name: translations_json
+                  value: '{"en":"Federal Tax","es":"Impuesto Federal","fr":"Impot Federal","de":"Bundessteuer","zh":"联邦税","ar":"الضريبة الفيدرالية"}'
+        - insert:
+            tableName: localized_messages
+            columns:
+              - column: { name: message_key, value: "tax.stateTax" }
+              - column: { name: category, value: "field_label" }
+              - column:
+                  name: translations_json
+                  value: '{"en":"State Tax","es":"Impuesto Estatal","fr":"Impot Regional","de":"Landessteuer","zh":"州税","ar":"ضريبة الولاية"}'
+        - insert:
+            tableName: localized_messages
+            columns:
+              - column: { name: message_key, value: "tax.takeHomePay" }
+              - column: { name: category, value: "field_label" }
+              - column:
+                  name: translations_json
+                  value: '{"en":"Take-Home Pay","es":"Salario Neto","fr":"Salaire Net","de":"Nettolohn","zh":"实得工资","ar":"صافي الراتب"}'
+        - insert:
+            tableName: localized_messages
+            columns:
+              - column: { name: message_key, value: "rates.title" }
+              - column: { name: category, value: "tool_response" }
+              - column:
+                  name: translations_json
+                  value: '{"en":"Current Market Rates","es":"Tasas de Mercado Actuales","fr":"Taux du Marche Actuels","de":"Aktuelle Marktzinsen","zh":"当前市场利率","ar":"أسعار السوق الحالية"}'
+        - insert:
+            tableName: localized_messages
+            columns:
+              - column: { name: message_key, value: "error.invalidInput" }
+              - column: { name: category, value: "error" }
+              - column:
+                  name: translations_json
+                  value: '{"en":"Invalid input provided. Please check your values.","es":"Entrada no valida. Por favor revise sus valores.","fr":"Entree invalide. Veuillez verifier vos valeurs.","de":"Ungültige Eingabe. Bitte überprüfen Sie Ihre Werte.","zh":"输入无效。请检查您的值。","ar":"إدخال غير صالح. يرجى التحقق من القيم الخاصة بك."}'
+        - insert:
+            tableName: localized_messages
+            columns:
+              - column: { name: message_key, value: "error.rateOutOfRange" }
+              - column: { name: category, value: "error" }
+              - column:
+                  name: translations_json
+                  value: '{"en":"The interest rate is outside the valid range. Most rates are between 3% and 15%.","es":"La tasa de interes esta fuera del rango valido. La mayoria de las tasas estan entre 3% y 15%.","fr":"Le taux interet est en dehors de la plage valide. La plupart des taux sont entre 3% et 15%.","de":"Der Zinssatz liegt außerhalb des gültigen Bereichs. Die meisten Zinssätze liegen zwischen 3% und 15%.","zh":"利率超出有效范围。大多数利率在3%到15%之间。","ar":"سعر الفائدة خارج النطاق الصالح. معظم الأسعار تتراوح بين 3% و15%."}'

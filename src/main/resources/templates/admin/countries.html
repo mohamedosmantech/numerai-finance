@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: sidebar(${username})}"></nav>
+
+<div class="main-wrapper">
+    <header class="main-header">
+        <h1 class="page-title">Countries</h1>
+        <span class="text-muted">2025 Tax Systems</span>
+    </header>
+
+    <main class="main-content">
+        <div class="row g-4">
+            <div class="col-md-6" th:each="country : ${countries}">
+                <div class="data-card">
+                    <div class="data-card-header">
+                        <div>
+                            <span class="badge bg-primary me-2" th:text="${country.code()}">US</span>
+                            <strong th:text="${country.name()}">United States</strong>
+                        </div>
+                        <span th:if="${country.hasRegionalTax()}" class="badge bg-success">Regional Tax</span>
+                        <span th:unless="${country.hasRegionalTax()}" class="badge bg-secondary">No Regional Tax</span>
+                    </div>
+                    <div style="padding: 1.25rem;">
+                        <table class="table table-sm mb-0">
+                            <tr>
+                                <th style="width: 40%;">Currency:</th>
+                                <td th:text="${country.currency()}">USD</td>
+                            </tr>
+                            <tr>
+                                <th>Rate Source:</th>
+                                <td><span class="badge bg-info" th:text="${country.rateSource()}">FRED</span></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<div th:replace="~{fragments/layout :: scripts}"></div>
+</body>
+</html>

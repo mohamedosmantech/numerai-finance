@@ -102,11 +102,12 @@ class McpControllerIntegrationTest {
                             .content(objectMapper.writeValueAsString(request)))
                     .andExpect(status().isAccepted())
                     .andExpect(jsonPath("$.result.tools").isArray())
-                    .andExpect(jsonPath("$.result.tools", hasSize(3)))
+                    .andExpect(jsonPath("$.result.tools", hasSize(4)))
                     .andExpect(jsonPath("$.result.tools[*].name", hasItems(
                             "calculate_loan_payment",
                             "calculate_compound_interest",
-                            "estimate_taxes"
+                            "estimate_taxes",
+                            "get_current_rates"
                     )));
         }
 

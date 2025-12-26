@@ -15,8 +15,45 @@ spring:
       write-dates-as-timestamps: false
     default-property-inclusion: non_null
 
+  # Database Configuration - PostgreSQL by default (Railway)
+  # Use application-local.yml for H2 local development
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/numerai}
+    driver-class-name: org.postgresql.Driver
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+
+  # Liquibase Database Migrations
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+    enabled: true
+
+  # H2 Console (dev only)
+  h2:
+    console:
+      enabled: ${H2_CONSOLE_ENABLED:true}
+      path: /h2-console
+
+  # Thymeleaf
+  thymeleaf:
+    cache: false
+
 # Numerai Finance Business Configuration
 fincalc:
+  # External Rate API Configuration
+  rates:
+    # Get a free API key from https://fred.stlouisfed.org/docs/api/api_key.html
+    fred-api-key: ${FRED_API_KEY:}
+    cache-duration-hours: 1
   validation:
     loan:
       min-years: 1
@@ -32,6 +69,11 @@ fincalc:
     tax:
       min-income: 0
       max-deductions: 10000000
+  # Admin Dashboard Credentials
+  admin:
+    username: ${ADMIN_USERNAME:admin}
+    password: ${ADMIN_PASSWORD:NumeraiFinance2025!}
+
   # OAuth configuration for OpenAI ChatGPT Apps
   oauth:
     resource-url: ${FINCALC_RESOURCE_URL:https://fincalc.example.com}

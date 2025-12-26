@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: sidebar(${username})}"></nav>
+
+<div class="main-wrapper">
+    <header class="main-header">
+        <h1 class="page-title">Messages</h1>
+        <span class="text-muted" th:text="${messages != null ? messages.size() + ' localized messages' : '0 messages'}">12 localized messages</span>
+    </header>
+
+    <main class="main-content">
+        <div class="data-card">
+            <div class="data-card-header">
+                <h5 class="data-card-title">Localized Messages</h5>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Key</th>
+                        <th>Category</th>
+                        <th>English</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="msg : ${messages}">
+                        <td><code th:text="${msg.key()}">loan.title</code></td>
+                        <td><span class="badge bg-secondary" th:text="${msg.category()}">tool_response</span></td>
+                        <td th:text="${msg.get('en')}">-</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</div>
+
+<div th:replace="~{fragments/layout :: scripts}"></div>
+</body>
+</html>

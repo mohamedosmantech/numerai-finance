@@ -1,0 +1,71 @@
+databaseChangeLog:
+  - changeSet:
+      id: 012-seed-rate-providers
+      author: Mohamed Osman
+      context: "!test"
+      changes:
+        - insert:
+            tableName: rate_providers
+            columns:
+              - column: { name: id, value: "FRED" }
+              - column: { name: name, value: "Federal Reserve Economic Data" }
+              - column: { name: type, value: "FRED" }
+              - column: { name: base_url, value: "https://api.stlouisfed.org/fred" }
+              - column: { name: api_key_env_var, value: "FRED_API_KEY" }
+              - column: { name: cache_duration_minutes, valueNumeric: 60 }
+              - column: { name: enabled, valueBoolean: true }
+              - column:
+                  name: series_mapping_json
+                  value: '{"MORTGAGE_30_YEAR":"MORTGAGE30US","MORTGAGE_15_YEAR":"MORTGAGE15US","PRIME_RATE":"DPRIME","CENTRAL_BANK_RATE":"FEDFUNDS"}'
+        - insert:
+            tableName: rate_providers
+            columns:
+              - column: { name: id, value: "ECB" }
+              - column: { name: name, value: "European Central Bank" }
+              - column: { name: type, value: "ECB" }
+              - column: { name: base_url, value: "https://sdw-wsrest.ecb.europa.eu/service" }
+              - column: { name: api_key_env_var, value: "" }
+              - column: { name: cache_duration_minutes, valueNumeric: 60 }
+              - column: { name: enabled, valueBoolean: true }
+              - column:
+                  name: series_mapping_json
+                  value: '{"CENTRAL_BANK_RATE":"FM.D.U2.EUR.4F.KR.MRR_FR.LEV"}'
+        - insert:
+            tableName: rate_providers
+            columns:
+              - column: { name: id, value: "BOE" }
+              - column: { name: name, value: "Bank of England" }
+              - column: { name: type, value: "BOE" }
+              - column: { name: base_url, value: "https://www.bankofengland.co.uk/boeapps/iadb" }
+              - column: { name: api_key_env_var, value: "" }
+              - column: { name: cache_duration_minutes, valueNumeric: 60 }
+              - column: { name: enabled, valueBoolean: true }
+              - column:
+                  name: series_mapping_json
+                  value: '{"CENTRAL_BANK_RATE":"IUDBEDR"}'
+        - insert:
+            tableName: rate_providers
+            columns:
+              - column: { name: id, value: "BOC" }
+              - column: { name: name, value: "Bank of Canada" }
+              - column: { name: type, value: "BOC" }
+              - column: { name: base_url, value: "https://www.bankofcanada.ca/valet" }
+              - column: { name: api_key_env_var, value: "" }
+              - column: { name: cache_duration_minutes, valueNumeric: 60 }
+              - column: { name: enabled, valueBoolean: true }
+              - column:
+                  name: series_mapping_json
+                  value: '{"CENTRAL_BANK_RATE":"IDOBCPOLICRATE"}'
+        - insert:
+            tableName: rate_providers
+            columns:
+              - column: { name: id, value: "RBA" }
+              - column: { name: name, value: "Reserve Bank of Australia" }
+              - column: { name: type, value: "RBA" }
+              - column: { name: base_url, value: "https://www.rba.gov.au/statistics/tables" }
+              - column: { name: api_key_env_var, value: "" }
+              - column: { name: cache_duration_minutes, valueNumeric: 60 }
+              - column: { name: enabled, valueBoolean: true }
+              - column:
+                  name: series_mapping_json
+                  value: '{"CENTRAL_BANK_RATE":"FIRMMCRT"}'

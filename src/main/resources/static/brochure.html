@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Numerai Finance - Product Brochure</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        @page { size: A4; margin: 0; }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: white;
+            color: #1e293b;
+        }
+
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            margin: 0 auto;
+            background: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media screen {
+            .page {
+                box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+                margin: 20px auto;
+            }
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+            padding: 40px 50px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 400px;
+            height: 400px;
+            background: rgba(6, 182, 212, 0.15);
+            border-radius: 50%;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header img {
+            width: 80px;
+            height: 80px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Main Content */
+        .content {
+            padding: 50px;
+        }
+
+        .tagline {
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #1e1b4b;
+            margin-bottom: 40px;
+            line-height: 1.3;
+        }
+
+        .tagline span {
+            color: #4f46e5;
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .feature-box {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border-radius: 16px;
+            padding: 25px;
+            border-left: 4px solid;
+        }
+
+        .feature-box.blue { border-left-color: #2563eb; }
+        .feature-box.green { border-left-color: #10b981; }
+        .feature-box.purple { border-left-color: #7c3aed; }
+        .feature-box.cyan { border-left-color: #06b6d4; }
+
+        .feature-box h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1e1b4b;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feature-box h3 i {
+            font-size: 1.3rem;
+        }
+
+        .feature-box.blue h3 i { color: #2563eb; }
+        .feature-box.green h3 i { color: #10b981; }
+        .feature-box.purple h3 i { color: #7c3aed; }
+        .feature-box.cyan h3 i { color: #06b6d4; }
+
+        .feature-box p {
+            font-size: 0.9rem;
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        /* Stats Banner */
+        .stats-banner {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            border-radius: 16px;
+            padding: 30px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .stat h4 {
+            font-size: 2rem;
+            font-weight: 800;
+        }
+
+        .stat p {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        /* Use Cases */
+        .use-cases {
+            margin-bottom: 40px;
+        }
+
+        .use-cases h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #1e1b4b;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .use-case-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .use-case {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .use-case i {
+            font-size: 2rem;
+            color: #4f46e5;
+            margin-bottom: 10px;
+        }
+
+        .use-case h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #1e1b4b;
+            margin-bottom: 6px;
+        }
+
+        .use-case p {
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+
+        /* Footer */
+        .footer {
+            background: #1e1b4b;
+            padding: 30px 50px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+
+        .footer-left h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .footer-left p {
+            font-size: 0.85rem;
+            opacity: 0.7;
+        }
+
+        .footer-right {
+            text-align: right;
+        }
+
+        .footer-right .url {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #06b6d4;
+        }
+
+        .footer-right p {
+            font-size: 0.8rem;
+            opacity: 0.6;
+        }
+
+        /* Print styles */
+        @media print {
+            .page {
+                box-shadow: none;
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <img src="/images/logo-dark.svg" alt="Numerai Finance">
+                <div>
+                    <h1>Numerai Finance</h1>
+                    <p>Smart Financial Intelligence for ChatGPT</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <div class="tagline">
+                Professional-Grade Financial Calculations<br>
+                <span>Powered by AI</span>
+            </div>
+
+            <!-- Features -->
+            <div class="features-grid">
+                <div class="feature-box blue">
+                    <h3><i class="bi bi-house-door-fill"></i> Loan Calculator</h3>
+                    <p>Calculate monthly payments, total interest costs, and amortization schedules for mortgages, auto loans, and personal loans with bank-level precision.</p>
+                </div>
+
+                <div class="feature-box green">
+                    <h3><i class="bi bi-graph-up-arrow"></i> Investment Growth</h3>
+                    <p>Project future wealth with compound interest, various compounding frequencies, and recurring monthly contributions. Perfect for retirement planning.</p>
+                </div>
+
+                <div class="feature-box purple">
+                    <h3><i class="bi bi-receipt"></i> Tax Estimator</h3>
+                    <p>Accurate 2025 federal and state tax calculations with effective rates, marginal brackets, and take-home pay projections for all 50 US states.</p>
+                </div>
+
+                <div class="feature-box cyan">
+                    <h3><i class="bi bi-currency-exchange"></i> Real-time Rates</h3>
+                    <p>Access current mortgage rates, Federal Reserve rates, and market data from trusted sources like FRED, updated daily.</p>
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-banner">
+                <div class="stat">
+                    <h4>25</h4>
+                    <p>Countries</p>
+                </div>
+                <div class="stat">
+                    <h4>2025</h4>
+                    <p>Tax Year</p>
+                </div>
+                <div class="stat">
+                    <h4>35</h4>
+                    <p>Currencies</p>
+                </div>
+                <div class="stat">
+                    <h4>24/7</h4>
+                    <p>Availability</p>
+                </div>
+            </div>
+
+            <!-- Use Cases -->
+            <div class="use-cases">
+                <h2>Who Benefits from Numerai Finance?</h2>
+                <div class="use-case-grid">
+                    <div class="use-case">
+                        <i class="bi bi-person-fill"></i>
+                        <h4>Home Buyers</h4>
+                        <p>Compare mortgage options instantly</p>
+                    </div>
+                    <div class="use-case">
+                        <i class="bi bi-piggy-bank-fill"></i>
+                        <h4>Investors</h4>
+                        <p>Plan retirement & savings goals</p>
+                    </div>
+                    <div class="use-case">
+                        <i class="bi bi-briefcase-fill"></i>
+                        <h4>Professionals</h4>
+                        <p>Estimate taxes & take-home pay</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <div class="footer-left">
+                <h4>Get Started Today</h4>
+                <p>No signup required. Just ask ChatGPT.</p>
+            </div>
+            <div class="footer-right">
+                <div class="url">numerai-finance.railway.app</div>
+                <p>&copy; 2025 Mohamed Osman</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

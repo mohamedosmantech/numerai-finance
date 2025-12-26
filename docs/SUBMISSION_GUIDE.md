@@ -1,247 +1,84 @@
-# FinCalc Pro - ChatGPT App Store Submission Guide
+# Numerai Finance - Submission Guide
 
-## What Has Been Done
+## Quick Start
 
-### 1. Backend (Java Spring Boot 3.5.3)
+### 1. Check Build Status
 
-#### Architecture
-- **Hexagonal Architecture** (Ports & Adapters) following SOLID principles
-- Separation of concerns: Domain, Application, Adapter layers
-- Dependency Inversion: All layers depend on abstractions (interfaces)
+**Option A: Railway Dashboard**
+- Go to: https://railway.com/project/82364e74-1d36-460a-8152-edd3bb3b7611
+- Watch the "Deployments" section
+- Green checkmark = Build complete
 
-#### Core Components Created
-
-| Component | Location | Purpose |
-|-----------|----------|---------|
-| `LoanCalculation` | `domain/model/` | Immutable record for loan calculations |
-| `CompoundInterestCalculation` | `domain/model/` | Investment growth calculations |
-| `TaxEstimation` | `domain/model/` | 2024 US federal + state tax calculations |
-| `LoanCalculatorService` | `domain/service/` | Implements loan use case (SRP) |
-| `CompoundInterestService` | `domain/service/` | Implements investment use case (SRP) |
-| `TaxEstimatorService` | `domain/service/` | Implements tax use case (SRP) |
-| `McpToolHandler` | `application/` | Bridges MCP protocol with domain |
-| `McpController` | `adapter/in/web/` | SSE/JSON-RPC endpoints |
-
-#### AOP & Cross-Cutting Concerns
-
-| Component | Purpose |
-|-----------|---------|
-| `LoggingAspect` | Automatic logging of service calls with timing |
-| `ExceptionHandlingAspect` | Centralized exception transformation |
-| `MetricsAspect` | Tool usage statistics collection |
-| `RateLimitFilter` | 60 requests/minute per IP |
-| `SecurityHeadersFilter` | XSS, Content-Type, Frame protection |
-
-#### Custom Bean Validation Constraints
-
-| Annotation | Validator Class | Purpose |
-|------------|-----------------|---------|
-| `@ValidMoney` | `ValidMoneyValidator` | Validates monetary amounts (positive/zero) |
-| `@ValidInterestRate` | `ValidInterestRateValidator` | Validates interest rate ranges |
-| `@ValidLoanTerm` | `ValidLoanTermValidator` | Validates loan/investment term in years |
-| `@ValidFilingStatus` | `ValidFilingStatusValidator` | Validates US tax filing status |
-
-#### Externalized Configuration
-
-| File | Purpose |
-|------|---------|
-| `application.yml` | Business rules (max loan years, rate limits) |
-| `ValidationMessages.properties` | i18n validation messages |
-| `FinCalcProperties.java` | Type-safe configuration binding |
-
-#### Health & Monitoring
-
-| Endpoint | Purpose |
-|----------|---------|
-| `/actuator/health` | Server health + calculation verification |
-| `/api/metrics/tools` | Tool usage statistics |
-| `/mcp/sessions/count` | Active MCP sessions |
-
-### 2. Frontend (React 18 + TypeScript + Vite)
-
-- Interactive demo with 3 tabbed calculators
-- Form inputs with real-time API calls
-- Professional styling with gradients and animations
-- Mobile-responsive design
-
-### 3. Testing
-
-- **113 unit tests** covering:
-  - Domain models (LoanCalculationTest, CompoundInterestCalculationTest, TaxEstimationTest)
-  - Domain services (LoanCalculatorServiceTest, CompoundInterestServiceTest, TaxEstimatorServiceTest)
-  - Application layer (McpToolHandlerTest)
-  - Integration tests (McpControllerIntegrationTest)
-
-### 4. DevOps
-
-| File | Purpose |
-|------|---------|
-| `Dockerfile` | Multi-stage build with Java 21 |
-| `docker-compose.yml` | Local container deployment |
-| `.dockerignore` | Build optimization |
-
----
-
-## Next Steps to Submit
-
-### Step 1: Get a Permanent Public URL
-
-**Option A: Quick Deploy (Recommended for Testing)**
+**Option B: Railway CLI**
 ```bash
-# Start ngrok
-ngrok http 8002
-
-# Your URL will be: https://xxx.ngrok-free.dev
+railway logs
 ```
 
-**Option B: Cloud Deployment (Production)**
+### 2. Generate Public Domain
 
-| Platform | Command |
-|----------|---------|
-| Railway | `railway init && railway up` |
-| Render | Connect GitHub repo |
-| Fly.io | `flyctl launch` |
-| AWS | `docker build -t fincalc-pro . && docker push` |
+After build completes:
+```bash
+railway service    # Select your service
+railway domain     # Generate public URL
+```
 
-### Step 2: Verify Endpoints
+You'll get a URL like: `numerai-finance-production.up.railway.app`
 
-Test these URLs (replace with your domain):
+### 3. Verify Endpoints
 
 ```bash
+# Replace with your Railway domain
+export DOMAIN=numerai-finance-production.up.railway.app
+
 # Health check
-curl https://YOUR_DOMAIN/actuator/health
+curl https://$DOMAIN/actuator/health
 
-# MCP SSE connection
-curl -H "Accept: text/event-stream" https://YOUR_DOMAIN/mcp
+# Landing page
+open https://$DOMAIN
 
-# Widget demo
-open https://YOUR_DOMAIN/widget/index.html
+# API docs
+open https://$DOMAIN/swagger-ui.html
 ```
 
-### Step 3: Submit to ChatGPT App Store
+### 4. Test in ChatGPT Developer Mode
 
-1. Go to: https://community.openai.com/t/chatgpt-app-store-is-open-for-submissions/1369611
+1. Go to ChatGPT → Settings → Connectors → Developer Mode
+2. Add your MCP server URL: `https://YOUR_DOMAIN/mcp`
+3. Test commands:
+   - "Calculate my mortgage for $300,000 at 6.5% for 30 years"
+   - "How much will $10,000 grow in 20 years at 7% interest?"
+   - "Estimate my taxes for $100,000 income in California"
 
-2. Fill in the submission form:
+### 5. Submit to App Store
+
+Portal: https://platform.openai.com/apps-manage
 
 | Field | Value |
 |-------|-------|
-| **App Name** | FinCalc Pro |
-| **Category** | Productivity / Finance |
-| **MCP Endpoint** | `https://YOUR_DOMAIN/mcp` |
-| **Transport** | SSE (Server-Sent Events) |
-| **Description** | Professional financial calculators for ChatGPT - mortgage payments, investment growth, and tax estimation |
-
-3. Provide tool descriptions:
-
-**Tool 1: calculate_loan_payment**
-> Calculate monthly payment, total payment, and total interest for mortgages and loans. Supports home loans, car loans, personal loans.
-
-**Tool 2: calculate_compound_interest**
-> Calculate future value of investments with compound interest and optional monthly contributions. Perfect for retirement planning and savings goals.
-
-**Tool 3: estimate_taxes**
-> Estimate US federal and state income taxes for 2024. Calculates tax liability, effective rate, and take-home pay.
-
-### Step 4: Prepare for Review
-
-Ensure you have:
-- [ ] Public HTTPS URL working
-- [ ] All 3 tools responding correctly
-- [ ] Health endpoint returning `{"status":"UP"}`
-- [ ] Widget demo accessible
-- [ ] No errors in server logs
+| App Name | Numerai Finance |
+| MCP Endpoint | `https://YOUR_DOMAIN/mcp` |
+| Transport | SSE |
+| Category | Finance |
+| Privacy Policy | `https://YOUR_DOMAIN/privacy-policy.html` |
 
 ---
 
-## File Structure Summary
+## Available Tools
 
-```
-fincalc-pro-java/
-├── src/main/java/com/fincalc/
-│   ├── FinCalcProApplication.java
-│   ├── domain/
-│   │   ├── model/
-│   │   │   ├── LoanCalculation.java
-│   │   │   ├── CompoundInterestCalculation.java
-│   │   │   └── TaxEstimation.java
-│   │   ├── port/in/
-│   │   │   ├── CalculateLoanPaymentUseCase.java
-│   │   │   ├── CalculateCompoundInterestUseCase.java
-│   │   │   └── EstimateTaxesUseCase.java
-│   │   ├── service/
-│   │   │   ├── LoanCalculatorService.java
-│   │   │   ├── CompoundInterestService.java
-│   │   │   └── TaxEstimatorService.java
-│   │   └── validation/constraint/
-│   │       ├── ValidMoney.java
-│   │       ├── ValidMoneyValidator.java
-│   │       ├── ValidInterestRate.java
-│   │       ├── ValidInterestRateValidator.java
-│   │       ├── ValidLoanTerm.java
-│   │       ├── ValidLoanTermValidator.java
-│   │       ├── ValidFilingStatus.java
-│   │       └── ValidFilingStatusValidator.java
-│   ├── application/
-│   │   └── McpToolHandler.java
-│   └── adapter/
-│       ├── in/web/
-│       │   ├── McpController.java
-│       │   └── dto/
-│       │       ├── JsonRpcRequest.java
-│       │       └── JsonRpcResponse.java
-│       └── config/
-│           ├── WebConfig.java
-│           ├── FinCalcProperties.java
-│           ├── RateLimitFilter.java
-│           ├── SecurityHeadersFilter.java
-│           ├── GlobalExceptionHandler.java
-│           ├── LoggingAspect.java
-│           ├── ExceptionHandlingAspect.java
-│           ├── MetricsAspect.java
-│           ├── MetricsController.java
-│           └── McpHealthIndicator.java
-├── src/main/resources/
-│   ├── application.yml
-│   └── ValidationMessages.properties
-├── src/test/java/com/fincalc/
-│   ├── domain/model/
-│   ├── domain/service/
-│   ├── application/
-│   └── adapter/in/web/
-├── widget/
-│   ├── src/
-│   │   ├── App.tsx
-│   │   └── styles.css
-│   ├── package.json
-│   └── vite.config.ts
-├── Dockerfile
-├── docker-compose.yml
-├── pom.xml
-└── README.md
-```
+### calculate_loan_payment
+Calculate mortgage and loan payments with full amortization.
 
----
+**Example prompt**: "What's my monthly payment for a $400,000 house at 7% for 30 years?"
 
-## Commands Reference
+### calculate_compound_interest
+Project investment growth with compound interest.
 
-```bash
-# Build
-./mvnw clean package -DskipTests
+**Example prompt**: "If I invest $500/month for 25 years at 8%, how much will I have?"
 
-# Run locally
-./mvnw spring-boot:run
+### estimate_taxes
+Estimate US federal and state income taxes.
 
-# Run tests
-./mvnw test
-
-# Build Docker
-docker build -t fincalc-pro .
-docker run -p 8002:8002 fincalc-pro
-
-# Build widget
-cd widget && pnpm install && pnpm run build
-```
+**Example prompt**: "Calculate my taxes for $85,000 salary in Texas, married filing jointly"
 
 ---
 
@@ -249,7 +86,14 @@ cd widget && pnpm install && pnpm run build
 
 | Issue | Solution |
 |-------|----------|
-| Port 8002 in use | `lsof -ti:8002 \| xargs kill -9` |
-| Widget blank | Rebuild: `cd widget && pnpm run build` |
-| 404 on /mcp/messages | Need to establish SSE connection first (GET /mcp) |
-| Tests fail | Run `./mvnw clean test -X` for debug output |
+| Build failed | Check Railway logs for errors |
+| Health check fails | Verify PORT environment variable |
+| Tools not working | Test `/mcp` endpoint directly |
+| 403 errors | Check CSP headers configuration |
+
+---
+
+## Project Links
+
+- GitHub: https://github.com/mohamedosmantech/numerai-finance
+- Railway: https://railway.com/project/82364e74-1d36-460a-8152-edd3bb3b7611

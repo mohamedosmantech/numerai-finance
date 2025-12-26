@@ -6,6 +6,7 @@ import com.fincalc.domain.model.TaxEstimation;
 import com.fincalc.domain.port.in.CalculateCompoundInterestUseCase;
 import com.fincalc.domain.port.in.CalculateLoanPaymentUseCase;
 import com.fincalc.domain.port.in.EstimateTaxesUseCase;
+import com.fincalc.domain.port.out.MarketRatePort;
 import jakarta.validation.Validator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -39,6 +40,9 @@ class McpToolHandlerTest {
     private EstimateTaxesUseCase taxesUseCase;
 
     @Mock
+    private MarketRatePort marketRatePort;
+
+    @Mock
     private Validator validator;
 
     private McpToolHandler handler;
@@ -47,7 +51,7 @@ class McpToolHandlerTest {
     void setUp() {
         // Mock validator to return no violations by default (lenient for tests that don't call validate)
         lenient().when(validator.validate(any())).thenReturn(Collections.emptySet());
-        handler = new McpToolHandler(loanPaymentUseCase, compoundInterestUseCase, taxesUseCase, validator);
+        handler = new McpToolHandler(loanPaymentUseCase, compoundInterestUseCase, taxesUseCase, marketRatePort, validator);
     }
 
     @Nested
@@ -55,11 +59,11 @@ class McpToolHandlerTest {
     class ToolDefinitions {
 
         @Test
-        @DisplayName("should return three tool definitions")
-        void shouldReturnThreeToolDefinitions() {
+        @DisplayName("should return four tool definitions")
+        void shouldReturnFourToolDefinitions() {
             List<Map<String, Object>> tools = handler.getToolDefinitions();
 
-            assertEquals(3, tools.size());
+            assertEquals(4, tools.size());
         }
 
         @Test

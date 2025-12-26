@@ -1,0 +1,48 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-create-currencies-table
+      author: Mohamed Osman
+      changes:
+        - createTable:
+            tableName: currencies
+            columns:
+              - column:
+                  name: code
+                  type: VARCHAR(3)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: symbol
+                  type: VARCHAR(10)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: decimal_places
+                  type: INT
+                  defaultValueNumeric: 2
+              - column:
+                  name: symbol_before
+                  type: BOOLEAN
+                  defaultValueBoolean: true
+              - column:
+                  name: thousands_separator
+                  type: VARCHAR(5)
+                  defaultValue: ","
+              - column:
+                  name: decimal_separator
+                  type: VARCHAR(5)
+                  defaultValue: "."
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP

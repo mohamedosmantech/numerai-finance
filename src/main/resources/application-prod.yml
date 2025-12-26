@@ -1,21 +1,91 @@
 # Production Environment Configuration
+# Usage: SPRING_PROFILES_ACTIVE=prod
+# Optimized for performance, security, and reliability
+
 server:
   port: ${PORT:8080}
   tomcat:
     threads:
       max: 400
       min-spare: 20
+    accept-count: 200
+    max-connections: 20000
+  compression:
+    enabled: true
+    mime-types: application/json,application/xml,text/html,text/plain,text/css,application/javascript
 
+spring:
+  # PostgreSQL for production
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+
+  jpa:
+    show-sql: false
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: false
+        generate_statistics: false
+
+  # Enable template caching
+  thymeleaf:
+    cache: true
+
+  # H2 Console disabled in production
+  h2:
+    console:
+      enabled: false
+
+# Minimal logging for performance
 logging:
   level:
+    root: WARN
     com.fincalc: INFO
     org.springframework.web: WARN
     org.springframework.security: WARN
+    org.hibernate: WARN
+    liquibase: WARN
 
+# Actuator - minimal exposure in production
 management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
   endpoint:
     health:
       show-details: never
+      probes:
+        enabled: true
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
   tracing:
     sampling:
       probability: ${TRACING_SAMPLING_PROBABILITY:0.1}
+
+# Production admin credentials (MUST be set via env vars)
+fincalc:
+  admin:
+    username: ${ADMIN_USERNAME}
+    password: ${ADMIN_PASSWORD}
+
+  # CSP for production
+  csp:
+    frame-ancestors: ${CSP_FRAME_ANCESTORS:https://chatgpt.com https://*.openai.com}
+    connect-src: ${CSP_CONNECT_SRC:https://chatgpt.com https://*.openai.com}
+
+  # Rate limiting for production
+  rate-limit:
+    enabled: true
+    requests-per-minute: ${RATE_LIMIT_RPM:60}

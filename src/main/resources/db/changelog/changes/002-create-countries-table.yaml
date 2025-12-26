@@ -1,0 +1,47 @@
+databaseChangeLog:
+  - changeSet:
+      id: 002-create-countries-table
+      author: Mohamed Osman
+      changes:
+        - createTable:
+            tableName: countries
+            columns:
+              - column:
+                  name: code
+                  type: VARCHAR(2)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: currency_code
+                  type: VARCHAR(3)
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_country_currency
+                    references: currencies(code)
+              - column:
+                  name: tax_system_json
+                  type: TEXT
+              - column:
+                  name: regions_json
+                  type: TEXT
+              - column:
+                  name: has_regional_tax
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+              - column:
+                  name: rate_source
+                  type: VARCHAR(50)
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP

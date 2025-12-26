@@ -1,0 +1,76 @@
+databaseChangeLog:
+  - changeSet:
+      id: 011-seed-countries
+      author: Mohamed Osman
+      context: "!test"
+      changes:
+        - insert:
+            tableName: countries
+            columns:
+              - column: { name: code, value: "US" }
+              - column: { name: name, value: "United States" }
+              - column: { name: currency_code, value: "USD" }
+              - column: { name: has_regional_tax, valueBoolean: true }
+              - column: { name: rate_source, value: "FRED" }
+              - column:
+                  name: tax_system_json
+                  value: '{"authority":"IRS","taxYear":"2025","brackets":[{"min":0,"max":11925,"rate":0.10,"baseTax":0},{"min":11925,"max":48475,"rate":0.12,"baseTax":1192.50},{"min":48475,"max":103350,"rate":0.22,"baseTax":5578.50},{"min":103350,"max":197300,"rate":0.24,"baseTax":17651},{"min":197300,"max":250525,"rate":0.32,"baseTax":40199},{"min":250525,"max":626350,"rate":0.35,"baseTax":57231},{"min":626350,"max":1.7976931348623157E308,"rate":0.37,"baseTax":188769.75}],"deductions":[{"type":"single","amount":15000},{"type":"married_filing_jointly","amount":30000},{"type":"married_filing_separately","amount":15000},{"type":"head_of_household","amount":22500}]}'
+              - column:
+                  name: regions_json
+                  value: '[{"code":"CA","name":"California","brackets":[]},{"code":"NY","name":"New York","brackets":[]},{"code":"TX","name":"Texas","brackets":[]},{"code":"FL","name":"Florida","brackets":[]},{"code":"WA","name":"Washington","brackets":[]}]'
+        - insert:
+            tableName: countries
+            columns:
+              - column: { name: code, value: "GB" }
+              - column: { name: name, value: "United Kingdom" }
+              - column: { name: currency_code, value: "GBP" }
+              - column: { name: has_regional_tax, valueBoolean: true }
+              - column: { name: rate_source, value: "BOE" }
+              - column:
+                  name: tax_system_json
+                  value: '{"authority":"HMRC","taxYear":"2025","brackets":[{"min":0,"max":12570,"rate":0,"baseTax":0},{"min":12570,"max":50270,"rate":0.20,"baseTax":0},{"min":50270,"max":125140,"rate":0.40,"baseTax":7540},{"min":125140,"max":1.7976931348623157E308,"rate":0.45,"baseTax":37428}],"deductions":[{"type":"personal_allowance","amount":12570}]}'
+              - column:
+                  name: regions_json
+                  value: '[{"code":"ENG","name":"England","brackets":[]},{"code":"SCO","name":"Scotland","brackets":[]},{"code":"WAL","name":"Wales","brackets":[]},{"code":"NIR","name":"Northern Ireland","brackets":[]}]'
+        - insert:
+            tableName: countries
+            columns:
+              - column: { name: code, value: "CA" }
+              - column: { name: name, value: "Canada" }
+              - column: { name: currency_code, value: "CAD" }
+              - column: { name: has_regional_tax, valueBoolean: true }
+              - column: { name: rate_source, value: "BOC" }
+              - column:
+                  name: tax_system_json
+                  value: '{"authority":"CRA","taxYear":"2025","brackets":[{"min":0,"max":57375,"rate":0.15,"baseTax":0},{"min":57375,"max":114750,"rate":0.205,"baseTax":8606.25},{"min":114750,"max":177882,"rate":0.26,"baseTax":20368.44},{"min":177882,"max":253414,"rate":0.29,"baseTax":36782.76},{"min":253414,"max":1.7976931348623157E308,"rate":0.33,"baseTax":58687.04}],"deductions":[{"type":"basic_personal","amount":16129}]}'
+              - column:
+                  name: regions_json
+                  value: '[{"code":"ON","name":"Ontario","brackets":[]},{"code":"QC","name":"Quebec","brackets":[]},{"code":"BC","name":"British Columbia","brackets":[]},{"code":"AB","name":"Alberta","brackets":[]}]'
+        - insert:
+            tableName: countries
+            columns:
+              - column: { name: code, value: "DE" }
+              - column: { name: name, value: "Germany" }
+              - column: { name: currency_code, value: "EUR" }
+              - column: { name: has_regional_tax, valueBoolean: false }
+              - column: { name: rate_source, value: "ECB" }
+              - column:
+                  name: tax_system_json
+                  value: '{"authority":"BZSt","taxYear":"2025","brackets":[{"min":0,"max":12084,"rate":0,"baseTax":0},{"min":12084,"max":17430,"rate":0.14,"baseTax":0},{"min":17430,"max":68480,"rate":0.24,"baseTax":748},{"min":68480,"max":277825,"rate":0.42,"baseTax":13002},{"min":277825,"max":1.7976931348623157E308,"rate":0.45,"baseTax":100927}],"deductions":[{"type":"grundfreibetrag","amount":12084}]}'
+              - column:
+                  name: regions_json
+                  value: '[]'
+        - insert:
+            tableName: countries
+            columns:
+              - column: { name: code, value: "AU" }
+              - column: { name: name, value: "Australia" }
+              - column: { name: currency_code, value: "AUD" }
+              - column: { name: has_regional_tax, valueBoolean: false }
+              - column: { name: rate_source, value: "RBA" }
+              - column:
+                  name: tax_system_json
+                  value: '{"authority":"ATO","taxYear":"2024-25","brackets":[{"min":0,"max":18200,"rate":0,"baseTax":0},{"min":18200,"max":45000,"rate":0.16,"baseTax":0},{"min":45000,"max":135000,"rate":0.30,"baseTax":4288},{"min":135000,"max":190000,"rate":0.37,"baseTax":31288},{"min":190000,"max":1.7976931348623157E308,"rate":0.45,"baseTax":51638}],"deductions":[]}'
+              - column:
+                  name: regions_json
+                  value: '[]'

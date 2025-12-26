@@ -1,0 +1,38 @@
+databaseChangeLog:
+  - changeSet:
+      id: 004-create-localized-messages-table
+      author: Mohamed Osman
+      changes:
+        - createTable:
+            tableName: localized_messages
+            columns:
+              - column:
+                  name: message_key
+                  type: VARCHAR(100)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: category
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: translations_json
+                  type: TEXT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+        - createIndex:
+            indexName: idx_messages_category
+            tableName: localized_messages
+            columns:
+              - column:
+                  name: category

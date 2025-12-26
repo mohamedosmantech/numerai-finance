@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: sidebar(${username})}"></nav>
+
+<div class="main-wrapper">
+    <header class="main-header">
+        <h1 class="page-title">Dashboard</h1>
+        <span class="text-muted">2025 Tax Brackets Active</span>
+    </header>
+
+    <main class="main-content">
+        <!-- Stats Row -->
+        <div class="row g-4 mb-4">
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="stat-label">Countries</div>
+                            <div class="stat-value" th:text="${countries != null ? countries.size() : 0}">5</div>
+                        </div>
+                        <div class="stat-icon blue"><i class="bi bi-globe-americas"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="stat-label">Currencies</div>
+                            <div class="stat-value" th:text="${currencies != null ? currencies.size() : 0}">15</div>
+                        </div>
+                        <div class="stat-icon green"><i class="bi bi-currency-exchange"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="stat-label">Rate Providers</div>
+                            <div class="stat-value" th:text="${rateProviders != null ? rateProviders.size() : 0}">5</div>
+                        </div>
+                        <div class="stat-icon purple"><i class="bi bi-graph-up-arrow"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="stat-label">Messages</div>
+                            <div class="stat-value" th:text="${messages != null ? messages.size() : 0}">12</div>
+                        </div>
+                        <div class="stat-icon orange"><i class="bi bi-translate"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Countries Table -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="data-card">
+                    <div class="data-card-header">
+                        <h5 class="data-card-title">Countries (2025 Tax Brackets)</h5>
+                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Code</th>
+                                <th>Name</th>
+                                <th>Currency</th>
+                                <th>Rate Source</th>
+                                <th>Regional Tax</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="country : ${countries}">
+                                <td><span class="badge bg-primary" th:text="${country.code()}">US</span></td>
+                                <td th:text="${country.name()}">United States</td>
+                                <td th:text="${country.currency()}">USD</td>
+                                <td><span class="badge bg-info" th:text="${country.rateSource()}">FRED</span></td>
+                                <td>
+                                    <span th:if="${country.hasRegionalTax()}" class="badge bg-success">Yes</span>
+                                    <span th:unless="${country.hasRegionalTax()}" class="badge bg-secondary">No</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Currencies and Providers Row -->
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="data-card">
+                    <div class="data-card-header">
+                        <h5 class="data-card-title">Currencies</h5>
+                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Code</th>
+                                <th>Symbol</th>
+                                <th>Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="c : ${currencies}" th:if="${#lists.size(currencies) <= 10 or cStat.index < 10}">
+                                <td><span class="badge bg-success" th:text="${c.code()}">USD</span></td>
+                                <td class="fs-5" th:text="${c.symbol()}">$</td>
+                                <td th:text="${c.name()}">US Dollar</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="data-card">
+                    <div class="data-card-header">
+                        <h5 class="data-card-title">Rate Providers</h5>
+                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Provider</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="provider : ${rateProviders}">
+                                <td>
+                                    <strong th:text="${provider.name()}">Federal Reserve</strong><br>
+                                    <small class="text-muted" th:text="${provider.id()}">FRED</small>
+                                </td>
+                                <td th:text="${provider.type()}">FRED</td>
+                                <td>
+                                    <span th:if="${provider.enabled()}" class="badge bg-success">Active</span>
+                                    <span th:unless="${provider.enabled()}" class="badge bg-danger">Inactive</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<div th:replace="~{fragments/layout :: scripts}"></div>
+</body>
+</html>
