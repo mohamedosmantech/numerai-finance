@@ -25,3 +25,11 @@ databaseChangeLog:
       file: db/changelog/changes/052-upsert-more-rate-providers.yaml
   - include:
       file: db/changelog/changes/053-upsert-more-localized-messages.yaml
+  - include:
+      file: db/changelog/changes/060-add-remaining-currencies.yaml
+  - include:
+      file: db/changelog/changes/061-add-remaining-countries.yaml
+  - include:
+      file: db/changelog/changes/062-add-remaining-providers.yaml
+  - include:
+      file: db/changelog/changes/063-add-remaining-messages.yaml

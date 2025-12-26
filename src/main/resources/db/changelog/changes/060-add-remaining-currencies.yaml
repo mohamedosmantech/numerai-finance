@@ -1,0 +1,71 @@
+databaseChangeLog:
+  - changeSet:
+      id: 060-add-remaining-currencies
+      author: Mohamed Osman
+      changes:
+        - sql:
+            sql: |
+              INSERT INTO currencies (code, symbol, name, decimal_places, symbol_before, thousands_separator, decimal_separator)
+              VALUES
+                -- Middle East & North Africa
+                ('AED', 'AED', 'UAE Dirham', 2, true, ',', '.'),
+                ('SAR', 'SAR', 'Saudi Riyal', 2, true, ',', '.'),
+                ('QAR', 'QAR', 'Qatari Riyal', 2, true, ',', '.'),
+                ('KWD', 'KD', 'Kuwaiti Dinar', 3, true, ',', '.'),
+                ('BHD', 'BD', 'Bahraini Dinar', 3, true, ',', '.'),
+                ('OMR', 'OMR', 'Omani Rial', 3, true, ',', '.'),
+                ('JOD', 'JD', 'Jordanian Dinar', 3, true, ',', '.'),
+                ('LBP', 'LL', 'Lebanese Pound', 0, true, ',', '.'),
+                ('MAD', 'MAD', 'Moroccan Dirham', 2, true, ' ', ','),
+                ('TND', 'DT', 'Tunisian Dinar', 3, true, ' ', ','),
+
+                -- Africa
+                ('NGN', 'N', 'Nigerian Naira', 2, true, ',', '.'),
+                ('KES', 'KSh', 'Kenyan Shilling', 2, true, ',', '.'),
+                ('GHS', 'GH¢', 'Ghanaian Cedi', 2, true, ',', '.'),
+                ('TZS', 'TSh', 'Tanzanian Shilling', 0, true, ',', '.'),
+                ('UGX', 'USh', 'Ugandan Shilling', 0, true, ',', '.'),
+                ('ETB', 'Br', 'Ethiopian Birr', 2, true, ',', '.'),
+                ('XOF', 'CFA', 'West African CFA Franc', 0, false, ' ', ','),
+                ('XAF', 'FCFA', 'Central African CFA Franc', 0, false, ' ', ','),
+
+                -- Asia Pacific
+                ('VND', 'd', 'Vietnamese Dong', 0, false, '.', ','),
+                ('TWD', 'NT$', 'Taiwan Dollar', 0, true, ',', '.'),
+                ('PKR', 'Rs', 'Pakistani Rupee', 0, true, ',', '.'),
+                ('BDT', 'Tk', 'Bangladeshi Taka', 2, true, ',', '.'),
+                ('LKR', 'Rs', 'Sri Lankan Rupee', 2, true, ',', '.'),
+                ('NPR', 'Rs', 'Nepalese Rupee', 2, true, ',', '.'),
+                ('MMK', 'K', 'Myanmar Kyat', 0, true, ',', '.'),
+                ('KHR', 'CR', 'Cambodian Riel', 0, true, ',', '.'),
+                ('LAK', 'KN', 'Lao Kip', 0, true, ',', '.'),
+                ('MNT', 'T', 'Mongolian Tugrik', 0, true, ',', '.'),
+
+                -- Latin America
+                ('PEN', 'S/', 'Peruvian Sol', 2, true, ',', '.'),
+                ('UYU', '$U', 'Uruguayan Peso', 2, true, '.', ','),
+                ('VES', 'Bs.', 'Venezuelan Bolivar', 2, true, '.', ','),
+                ('BOB', 'Bs.', 'Bolivian Boliviano', 2, true, ',', '.'),
+                ('PYG', 'Gs', 'Paraguayan Guarani', 0, true, '.', ','),
+                ('GTQ', 'Q', 'Guatemalan Quetzal', 2, true, ',', '.'),
+                ('HNL', 'L', 'Honduran Lempira', 2, true, ',', '.'),
+                ('NIO', 'C$', 'Nicaraguan Cordoba', 2, true, ',', '.'),
+                ('CRC', '¢', 'Costa Rican Colon', 0, true, '.', ','),
+                ('PAB', 'B/.', 'Panamanian Balboa', 2, true, ',', '.'),
+                ('DOP', 'RD$', 'Dominican Peso', 2, true, ',', '.'),
+                ('JMD', 'J$', 'Jamaican Dollar', 2, true, ',', '.'),
+                ('TTD', 'TT$', 'Trinidad and Tobago Dollar', 2, true, ',', '.'),
+
+                -- Europe
+                ('RON', 'lei', 'Romanian Leu', 2, false, '.', ','),
+                ('BGN', 'лв', 'Bulgarian Lev', 2, false, ' ', ','),
+                ('HRK', 'kn', 'Croatian Kuna', 2, false, '.', ','),
+                ('RSD', 'din', 'Serbian Dinar', 0, false, '.', ','),
+                ('UAH', 'грн', 'Ukrainian Hryvnia', 2, false, ' ', ','),
+                ('ISK', 'kr', 'Icelandic Krona', 0, false, '.', ','),
+                ('GEL', 'GEL', 'Georgian Lari', 2, false, ' ', ','),
+
+                -- Oceania
+                ('FJD', 'FJ$', 'Fijian Dollar', 2, true, ',', '.'),
+                ('PGK', 'K', 'Papua New Guinean Kina', 2, true, ',', '.')
+              ON CONFLICT (code) DO NOTHING;

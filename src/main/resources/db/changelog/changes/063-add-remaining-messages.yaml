@@ -1,0 +1,81 @@
+databaseChangeLog:
+  - changeSet:
+      id: 063-add-remaining-messages
+      author: Mohamed Osman
+      changes:
+        - sql:
+            sql: |
+              INSERT INTO localized_messages (message_key, category, translations_json)
+              VALUES
+                -- Loan Calculator Messages
+                ('loan.title', 'loan', '{"en":"Loan Payment Calculator","es":"Calculadora de Pagos de Prestamo","fr":"Calculateur de Paiement de Pret","de":"Kreditrechner","pt":"Calculadora de Pagamento de Emprestimo","ja":"ローン支払い計算機","zh":"贷款支付计算器","ar":"حاسبة سداد القرض","hi":"ऋण भुगतान कैलकुलेटर","ko":"대출 상환 계산기"}'),
+                ('loan.principal', 'loan', '{"en":"Principal Amount","es":"Monto del Capital","fr":"Montant du Capital","de":"Darlehensbetrag","pt":"Valor do Principal","ja":"元金","zh":"本金金额","ar":"المبلغ الأساسي","hi":"मूलधन राशि","ko":"원금"}'),
+                ('loan.rate', 'loan', '{"en":"Annual Interest Rate","es":"Tasa de Interes Anual","fr":"Taux d Interet Annuel","de":"Jahreszinssatz","pt":"Taxa de Juros Anual","ja":"年利率","zh":"年利率","ar":"معدل الفائدة السنوي","hi":"वार्षिक ब्याज दर","ko":"연이자율"}'),
+                ('loan.term', 'loan', '{"en":"Loan Term","es":"Plazo del Prestamo","fr":"Duree du Pret","de":"Kreditlaufzeit","pt":"Prazo do Emprestimo","ja":"ローン期間","zh":"贷款期限","ar":"مدة القرض","hi":"ऋण अवधि","ko":"대출 기간"}'),
+                ('loan.monthly', 'loan', '{"en":"Monthly Payment","es":"Pago Mensual","fr":"Paiement Mensuel","de":"Monatliche Zahlung","pt":"Pagamento Mensal","ja":"月々の支払い","zh":"月付金额","ar":"الدفعة الشهرية","hi":"मासिक भुगतान","ko":"월 납입금"}'),
+                ('loan.total', 'loan', '{"en":"Total Payment","es":"Pago Total","fr":"Paiement Total","de":"Gesamtzahlung","pt":"Pagamento Total","ja":"総支払額","zh":"总付款额","ar":"إجمالي الدفع","hi":"कुल भुगतान","ko":"총 상환금"}'),
+                ('loan.interest', 'loan', '{"en":"Total Interest","es":"Interes Total","fr":"Interet Total","de":"Gesamtzinsen","pt":"Juros Totais","ja":"支払利息合計","zh":"利息总额","ar":"إجمالي الفائدة","hi":"कुल ब्याज","ko":"총 이자"}'),
+
+                -- Investment Calculator Messages
+                ('invest.title', 'investment', '{"en":"Investment Growth Calculator","es":"Calculadora de Crecimiento de Inversiones","fr":"Calculateur de Croissance des Investissements","de":"Investitionswachstumsrechner","pt":"Calculadora de Crescimento de Investimentos","ja":"投資成長計算機","zh":"投资增长计算器","ar":"حاسبة نمو الاستثمار","hi":"निवेश वृद्धि कैलकुलेटर","ko":"투자 성장 계산기"}'),
+                ('invest.initial', 'investment', '{"en":"Initial Investment","es":"Inversion Inicial","fr":"Investissement Initial","de":"Anfangsinvestition","pt":"Investimento Inicial","ja":"初期投資額","zh":"初始投资","ar":"الاستثمار الأولي","hi":"प्रारंभिक निवेश","ko":"초기 투자금"}'),
+                ('invest.rate', 'investment', '{"en":"Expected Annual Return","es":"Retorno Anual Esperado","fr":"Rendement Annuel Attendu","de":"Erwartete Jahresrendite","pt":"Retorno Anual Esperado","ja":"予想年間リターン","zh":"预期年回报率","ar":"العائد السنوي المتوقع","hi":"अपेक्षित वार्षिक रिटर्न","ko":"예상 연간 수익률"}'),
+                ('invest.years', 'investment', '{"en":"Investment Period (Years)","es":"Periodo de Inversion (Anos)","fr":"Periode d Investissement (Annees)","de":"Anlagezeitraum (Jahre)","pt":"Periodo de Investimento (Anos)","ja":"投資期間（年）","zh":"投资期限（年）","ar":"فترة الاستثمار (سنوات)","hi":"निवेश अवधि (वर्ष)","ko":"투자 기간 (년)"}'),
+                ('invest.future', 'investment', '{"en":"Future Value","es":"Valor Futuro","fr":"Valeur Future","de":"Zukunftswert","pt":"Valor Futuro","ja":"将来価値","zh":"未来价值","ar":"القيمة المستقبلية","hi":"भविष्य मूल्य","ko":"미래 가치"}'),
+                ('invest.earned', 'investment', '{"en":"Total Interest Earned","es":"Intereses Ganados Totales","fr":"Interets Gagnes Totaux","de":"Verdiente Gesamtzinsen","pt":"Juros Totais Ganhos","ja":"獲得利息合計","zh":"赚取利息总额","ar":"إجمالي الفائدة المكتسبة","hi":"कुल अर्जित ब्याज","ko":"총 이자 수익"}'),
+                ('invest.compound', 'investment', '{"en":"Compounding Frequency","es":"Frecuencia de Capitalizacion","fr":"Frequence de Capitalisation","de":"Zinseszinshaufigkeit","pt":"Frequencia de Capitalizacao","ja":"複利頻度","zh":"复利频率","ar":"تكرار المركب","hi":"चक्रवृद्धि आवृत्ति","ko":"복리 빈도"}'),
+
+                -- Tax Calculator Messages
+                ('tax.title', 'tax', '{"en":"Tax Estimator","es":"Estimador de Impuestos","fr":"Estimateur d Impots","de":"Steuerrechner","pt":"Estimador de Impostos","ja":"税金計算機","zh":"税务计算器","ar":"مقدر الضرائب","hi":"कर अनुमानक","ko":"세금 계산기"}'),
+                ('tax.income', 'tax', '{"en":"Gross Annual Income","es":"Ingreso Bruto Anual","fr":"Revenu Brut Annuel","de":"Bruttojahreseinkommen","pt":"Renda Bruta Anual","ja":"年間総収入","zh":"年度总收入","ar":"الدخل السنوي الإجمالي","hi":"कुल वार्षिक आय","ko":"연간 총소득"}'),
+                ('tax.filing', 'tax', '{"en":"Filing Status","es":"Estado Civil Tributario","fr":"Statut de Declaration","de":"Steuerstatus","pt":"Status de Declaracao","ja":"申告ステータス","zh":"申报状态","ar":"حالة التقديم","hi":"फाइलिंग स्थिति","ko":"신고 상태"}'),
+                ('tax.deductions', 'tax', '{"en":"Deductions","es":"Deducciones","fr":"Deductions","de":"Abzuge","pt":"Deducoes","ja":"控除","zh":"扣除额","ar":"الخصومات","hi":"कटौती","ko":"공제"}'),
+                ('tax.federal', 'tax', '{"en":"Federal Tax","es":"Impuesto Federal","fr":"Impot Federal","de":"Bundessteuer","pt":"Imposto Federal","ja":"連邦税","zh":"联邦税","ar":"الضريبة الفيدرالية","hi":"संघीय कर","ko":"연방세"}'),
+                ('tax.state', 'tax', '{"en":"State Tax","es":"Impuesto Estatal","fr":"Impot Etat","de":"Landessteuer","pt":"Imposto Estadual","ja":"州税","zh":"州税","ar":"ضريبة الولاية","hi":"राज्य कर","ko":"주세"}'),
+                ('tax.total', 'tax', '{"en":"Total Tax","es":"Impuesto Total","fr":"Impot Total","de":"Gesamtsteuer","pt":"Imposto Total","ja":"総税額","zh":"税款总额","ar":"إجمالي الضريبة","hi":"कुल कर","ko":"총 세금"}'),
+                ('tax.effective', 'tax', '{"en":"Effective Tax Rate","es":"Tasa Impositiva Efectiva","fr":"Taux d Imposition Effectif","de":"Effektiver Steuersatz","pt":"Taxa Efetiva de Imposto","ja":"実効税率","zh":"有效税率","ar":"معدل الضريبة الفعلي","hi":"प्रभावी कर दर","ko":"실효세율"}'),
+                ('tax.takehome', 'tax', '{"en":"Take-Home Pay","es":"Salario Neto","fr":"Salaire Net","de":"Nettogehalt","pt":"Salario Liquido","ja":"手取り額","zh":"税后收入","ar":"صافي الراتب","hi":"हाथ में आने वाला वेतन","ko":"실수령액"}'),
+
+                -- Market Rates Messages
+                ('rates.title', 'rates', '{"en":"Current Market Rates","es":"Tasas de Mercado Actuales","fr":"Taux du Marche Actuels","de":"Aktuelle Marktzinsen","pt":"Taxas de Mercado Atuais","ja":"現在の市場金利","zh":"当前市场利率","ar":"أسعار السوق الحالية","hi":"वर्तमान बाजार दरें","ko":"현재 시장 금리"}'),
+                ('rates.mortgage30', 'rates', '{"en":"30-Year Fixed Mortgage","es":"Hipoteca Fija a 30 Anos","fr":"Hypotheque Fixe 30 Ans","de":"30-Jahres Festhypothek","pt":"Hipoteca Fixa 30 Anos","ja":"30年固定住宅ローン","zh":"30年期固定抵押贷款","ar":"رهن عقاري ثابت لمدة 30 عامًا","hi":"30-वर्षीय निश्चित बंधक","ko":"30년 고정 모기지"}'),
+                ('rates.mortgage15', 'rates', '{"en":"15-Year Fixed Mortgage","es":"Hipoteca Fija a 15 Anos","fr":"Hypotheque Fixe 15 Ans","de":"15-Jahres Festhypothek","pt":"Hipoteca Fixa 15 Anos","ja":"15年固定住宅ローン","zh":"15年期固定抵押贷款","ar":"رهن عقاري ثابت لمدة 15 عامًا","hi":"15-वर्षीय निश्चित बंधक","ko":"15년 고정 모기지"}'),
+                ('rates.prime', 'rates', '{"en":"Prime Rate","es":"Tasa Preferencial","fr":"Taux Preferentiel","de":"Leitzins","pt":"Taxa Prime","ja":"プライムレート","zh":"优惠利率","ar":"سعر الفائدة الأساسي","hi":"प्राइम रेट","ko":"프라임 금리"}'),
+                ('rates.federal', 'rates', '{"en":"Federal Funds Rate","es":"Tasa de Fondos Federales","fr":"Taux des Fonds Federaux","de":"Leitzins der Fed","pt":"Taxa de Fundos Federais","ja":"フェデラルファンド金利","zh":"联邦基金利率","ar":"معدل الأموال الفيدرالية","hi":"फेडरल फंड्स दर","ko":"연방기금금리"}'),
+                ('rates.updated', 'rates', '{"en":"Last Updated","es":"Ultima Actualizacion","fr":"Derniere Mise a Jour","de":"Zuletzt aktualisiert","pt":"Ultima Atualizacao","ja":"最終更新","zh":"最后更新","ar":"آخر تحديث","hi":"अंतिम अपडेट","ko":"최종 업데이트"}'),
+
+                -- Common UI Messages
+                ('ui.calculate', 'ui', '{"en":"Calculate","es":"Calcular","fr":"Calculer","de":"Berechnen","pt":"Calcular","ja":"計算する","zh":"计算","ar":"احسب","hi":"गणना करें","ko":"계산"}'),
+                ('ui.reset', 'ui', '{"en":"Reset","es":"Restablecer","fr":"Reinitialiser","de":"Zurucksetzen","pt":"Redefinir","ja":"リセット","zh":"重置","ar":"إعادة تعيين","hi":"रीसेट","ko":"초기화"}'),
+                ('ui.results', 'ui', '{"en":"Results","es":"Resultados","fr":"Resultats","de":"Ergebnisse","pt":"Resultados","ja":"結果","zh":"结果","ar":"النتائج","hi":"परिणाम","ko":"결과"}'),
+                ('ui.details', 'ui', '{"en":"Details","es":"Detalles","fr":"Details","de":"Details","pt":"Detalhes","ja":"詳細","zh":"详情","ar":"التفاصيل","hi":"विवरण","ko":"상세"}'),
+                ('ui.summary', 'ui', '{"en":"Summary","es":"Resumen","fr":"Resume","de":"Zusammenfassung","pt":"Resumo","ja":"概要","zh":"摘要","ar":"ملخص","hi":"सारांश","ko":"요약"}'),
+                ('ui.note', 'ui', '{"en":"Note","es":"Nota","fr":"Remarque","de":"Hinweis","pt":"Nota","ja":"注記","zh":"备注","ar":"ملاحظة","hi":"नोट","ko":"참고"}'),
+                ('ui.warning', 'ui', '{"en":"Warning","es":"Advertencia","fr":"Avertissement","de":"Warnung","pt":"Aviso","ja":"警告","zh":"警告","ar":"تحذير","hi":"चेतावनी","ko":"경고"}'),
+                ('ui.error', 'ui', '{"en":"Error","es":"Error","fr":"Erreur","de":"Fehler","pt":"Erro","ja":"エラー","zh":"错误","ar":"خطأ","hi":"त्रुटि","ko":"오류"}'),
+                ('ui.success', 'ui', '{"en":"Success","es":"Exito","fr":"Succes","de":"Erfolg","pt":"Sucesso","ja":"成功","zh":"成功","ar":"نجاح","hi":"सफलता","ko":"성공"}'),
+                ('ui.loading', 'ui', '{"en":"Loading...","es":"Cargando...","fr":"Chargement...","de":"Laden...","pt":"Carregando...","ja":"読み込み中...","zh":"加载中...","ar":"جار التحميل...","hi":"लोड हो रहा है...","ko":"로딩 중..."}'),
+
+                -- Filing Status Labels
+                ('status.single', 'tax', '{"en":"Single","es":"Soltero","fr":"Celibataire","de":"Ledig","pt":"Solteiro","ja":"独身","zh":"单身","ar":"أعزب","hi":"अविवाहित","ko":"미혼"}'),
+                ('status.married_joint', 'tax', '{"en":"Married Filing Jointly","es":"Casado Declarando Conjuntamente","fr":"Marie Declaration Conjointe","de":"Verheiratet gemeinsam veranlagt","pt":"Casado Declarando em Conjunto","ja":"夫婦合算申告","zh":"已婚联合申报","ar":"متزوج يقدم بشكل مشترك","hi":"विवाहित संयुक्त रूप से","ko":"부부 공동 신고"}'),
+                ('status.married_separate', 'tax', '{"en":"Married Filing Separately","es":"Casado Declarando por Separado","fr":"Marie Declaration Separee","de":"Verheiratet getrennt veranlagt","pt":"Casado Declarando Separadamente","ja":"夫婦個別申告","zh":"已婚分开申报","ar":"متزوج يقدم بشكل منفصل","hi":"विवाहित अलग से","ko":"부부 개별 신고"}'),
+                ('status.head_of_household', 'tax', '{"en":"Head of Household","es":"Jefe de Familia","fr":"Chef de Famille","de":"Haushaltsvorstand","pt":"Chefe de Familia","ja":"世帯主","zh":"户主","ar":"رب الأسرة","hi":"घर का मुखिया","ko":"세대주"}'),
+
+                -- Compounding Labels
+                ('compound.annually', 'investment', '{"en":"Annually","es":"Anualmente","fr":"Annuellement","de":"Jahrlich","pt":"Anualmente","ja":"年次","zh":"每年","ar":"سنويا","hi":"वार्षिक","ko":"연간"}'),
+                ('compound.semiannually', 'investment', '{"en":"Semi-Annually","es":"Semestralmente","fr":"Semestriellement","de":"Halbjahrlich","pt":"Semestralmente","ja":"半年ごと","zh":"每半年","ar":"نصف سنوي","hi":"अर्धवार्षिक","ko":"반년"}'),
+                ('compound.quarterly', 'investment', '{"en":"Quarterly","es":"Trimestralmente","fr":"Trimestriellement","de":"Vierteljahrlich","pt":"Trimestralmente","ja":"四半期ごと","zh":"每季度","ar":"ربع سنوي","hi":"तिमाही","ko":"분기"}'),
+                ('compound.monthly', 'investment', '{"en":"Monthly","es":"Mensualmente","fr":"Mensuellement","de":"Monatlich","pt":"Mensalmente","ja":"毎月","zh":"每月","ar":"شهريا","hi":"मासिक","ko":"월간"}'),
+                ('compound.daily', 'investment', '{"en":"Daily","es":"Diariamente","fr":"Quotidiennement","de":"Taglich","pt":"Diariamente","ja":"毎日","zh":"每日","ar":"يوميا","hi":"दैनिक","ko":"일간"}'),
+
+                -- Default Notice Messages
+                ('default.notice', 'system', '{"en":"Using default values","es":"Usando valores predeterminados","fr":"Utilisation des valeurs par defaut","de":"Standardwerte verwenden","pt":"Usando valores padrao","ja":"デフォルト値を使用","zh":"使用默认值","ar":"استخدام القيم الافتراضية","hi":"डिफ़ॉल्ट मान का उपयोग","ko":"기본값 사용"}'),
+                ('default.country', 'system', '{"en":"Country not detected, using US","es":"Pais no detectado, usando EEUU","fr":"Pays non detecte, utilisation des USA","de":"Land nicht erkannt, USA wird verwendet","pt":"Pais nao detectado, usando EUA","ja":"国が検出されませんでした。米国を使用","zh":"未检测到国家，使用美国","ar":"لم يتم اكتشاف البلد، باستخدام الولايات المتحدة","hi":"देश का पता नहीं चला, अमेरिका का उपयोग कर रहे हैं","ko":"국가가 감지되지 않음, 미국 사용"}'),
+                ('default.language', 'system', '{"en":"Language not detected, using English","es":"Idioma no detectado, usando ingles","fr":"Langue non detectee, utilisation de l anglais","de":"Sprache nicht erkannt, Englisch wird verwendet","pt":"Idioma nao detectado, usando ingles","ja":"言語が検出されませんでした。英語を使用","zh":"未检测到语言，使用英语","ar":"لم يتم اكتشاف اللغة، باستخدام الإنجليزية","hi":"भाषा का पता नहीं चला, अंग्रेजी का उपयोग कर रहे हैं","ko":"언어가 감지되지 않음, 영어 사용"}'),
+
+                -- Data Source Messages
+                ('source.fred', 'system', '{"en":"Federal Reserve Economic Data (FRED)","es":"Datos Economicos de la Reserva Federal","fr":"Donnees Economiques de la Reserve Federale","de":"Wirtschaftsdaten der Federal Reserve","pt":"Dados Economicos do Federal Reserve","ja":"連邦準備制度経済データ","zh":"联邦储备经济数据","ar":"بيانات الاحتياطي الفيدرالي الاقتصادية","hi":"फेडरल रिजर्व आर्थिक डेटा","ko":"연방준비제도 경제 데이터"}'),
+                ('source.irs', 'system', '{"en":"Internal Revenue Service (IRS)","es":"Servicio de Impuestos Internos","fr":"Service des Impots","de":"Finanzamt","pt":"Receita Federal","ja":"内国歳入庁","zh":"美国国税局","ar":"مصلحة الضرائب الأمريكية","hi":"आंतरिक राजस्व सेवा","ko":"국세청"}'),
+                ('source.provider', 'system', '{"en":"Numerai Finance","es":"Numerai Finance","fr":"Numerai Finance","de":"Numerai Finance","pt":"Numerai Finance","ja":"Numerai Finance","zh":"Numerai Finance","ar":"Numerai Finance","hi":"Numerai Finance","ko":"Numerai Finance"}')
+              ON CONFLICT (message_key) DO NOTHING;

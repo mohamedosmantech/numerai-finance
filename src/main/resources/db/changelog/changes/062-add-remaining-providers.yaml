@@ -1,0 +1,57 @@
+databaseChangeLog:
+  - changeSet:
+      id: 062-add-remaining-providers
+      author: Mohamed Osman
+      changes:
+        - sql:
+            sql: |
+              INSERT INTO rate_providers (id, name, type, base_url, api_key_env_var, cache_duration_minutes, enabled, series_mapping_json)
+              VALUES
+                -- Middle East Central Banks
+                ('cbuae', 'Central Bank of UAE', 'CENTRAL_BANK', 'https://www.centralbank.ae/api', null, 1440, true, '{"baseRate":"UAE_BASE_RATE","inflationRate":"UAE_INFLATION"}'),
+                ('sama', 'Saudi Arabian Monetary Authority', 'CENTRAL_BANK', 'https://www.sama.gov.sa/api', null, 1440, true, '{"repoRate":"SAMA_REPO","reverseRepoRate":"SAMA_REVERSE_REPO"}'),
+                ('cbi', 'Central Bank of Israel', 'CENTRAL_BANK', 'https://www.boi.org.il/api', null, 720, true, '{"baseRate":"BOI_RATE","primeRate":"BOI_PRIME"}'),
+                ('cbe', 'Central Bank of Egypt', 'CENTRAL_BANK', 'https://www.cbe.org.eg/api', null, 1440, true, '{"discountRate":"CBE_DISCOUNT","lendingRate":"CBE_LENDING"}'),
+
+                -- African Central Banks
+                ('sarb', 'South African Reserve Bank', 'CENTRAL_BANK', 'https://www.resbank.co.za/api', null, 720, true, '{"repoRate":"SARB_REPO","primeRate":"SARB_PRIME"}'),
+                ('cbn', 'Central Bank of Nigeria', 'CENTRAL_BANK', 'https://www.cbn.gov.ng/api', null, 1440, true, '{"mpr":"CBN_MPR","primeRate":"CBN_PRIME"}'),
+                ('cbk', 'Central Bank of Kenya', 'CENTRAL_BANK', 'https://www.centralbank.go.ke/api', null, 1440, true, '{"cbr":"CBK_CBR","kbrr":"CBK_KBRR"}'),
+
+                -- Asian Central Banks
+                ('boj', 'Bank of Japan', 'CENTRAL_BANK', 'https://www.boj.or.jp/api', null, 720, true, '{"policyRate":"BOJ_POLICY","callRate":"BOJ_CALL"}'),
+                ('bok', 'Bank of Korea', 'CENTRAL_BANK', 'https://www.bok.or.kr/api', null, 720, true, '{"baseRate":"BOK_BASE","callRate":"BOK_CALL"}'),
+                ('rbi', 'Reserve Bank of India', 'CENTRAL_BANK', 'https://www.rbi.org.in/api', null, 720, true, '{"repoRate":"RBI_REPO","reverseRepo":"RBI_REVERSE_REPO","bankRate":"RBI_BANK_RATE"}'),
+                ('pbc', 'Peoples Bank of China', 'CENTRAL_BANK', 'https://www.pbc.gov.cn/api', null, 720, true, '{"lpr1y":"PBC_LPR_1Y","lpr5y":"PBC_LPR_5Y","rrr":"PBC_RRR"}'),
+                ('bot', 'Bank of Thailand', 'CENTRAL_BANK', 'https://www.bot.or.th/api', null, 720, true, '{"policyRate":"BOT_POLICY","depositRate":"BOT_DEPOSIT"}'),
+                ('bnm', 'Bank Negara Malaysia', 'CENTRAL_BANK', 'https://www.bnm.gov.my/api', null, 720, true, '{"opr":"BNM_OPR","blr":"BNM_BLR"}'),
+                ('bi', 'Bank Indonesia', 'CENTRAL_BANK', 'https://www.bi.go.id/api', null, 720, true, '{"biRate":"BI_RATE","depositFacility":"BI_DEPOSIT"}'),
+                ('bsp', 'Bangko Sentral ng Pilipinas', 'CENTRAL_BANK', 'https://www.bsp.gov.ph/api', null, 720, true, '{"rrpRate":"BSP_RRP","overnightRate":"BSP_OVERNIGHT"}'),
+                ('sbv', 'State Bank of Vietnam', 'CENTRAL_BANK', 'https://www.sbv.gov.vn/api', null, 1440, true, '{"refinanceRate":"SBV_REFINANCE","discountRate":"SBV_DISCOUNT"}'),
+
+                -- European Central Banks
+                ('snb', 'Swiss National Bank', 'CENTRAL_BANK', 'https://www.snb.ch/api', null, 720, true, '{"policyRate":"SNB_POLICY","saron":"SNB_SARON"}'),
+                ('riksbank', 'Sveriges Riksbank', 'CENTRAL_BANK', 'https://www.riksbank.se/api', null, 720, true, '{"policyRate":"RIKSBANK_POLICY","repoRate":"RIKSBANK_REPO"}'),
+                ('norges', 'Norges Bank', 'CENTRAL_BANK', 'https://www.norges-bank.no/api', null, 720, true, '{"keyPolicyRate":"NB_POLICY","nibor":"NB_NIBOR"}'),
+                ('dnb', 'Danmarks Nationalbank', 'CENTRAL_BANK', 'https://www.nationalbanken.dk/api', null, 720, true, '{"discountRate":"DNB_DISCOUNT","lendingRate":"DNB_LENDING"}'),
+                ('nbp', 'National Bank of Poland', 'CENTRAL_BANK', 'https://www.nbp.pl/api', null, 720, true, '{"referenceRate":"NBP_REF","lombardRate":"NBP_LOMBARD"}'),
+                ('cnb', 'Czech National Bank', 'CENTRAL_BANK', 'https://www.cnb.cz/api', null, 720, true, '{"repoRate":"CNB_REPO","discountRate":"CNB_DISCOUNT"}'),
+                ('mnb', 'Magyar Nemzeti Bank', 'CENTRAL_BANK', 'https://www.mnb.hu/api', null, 720, true, '{"baseRate":"MNB_BASE","overnightRate":"MNB_OVERNIGHT"}'),
+                ('tcmb', 'Central Bank of Turkey', 'CENTRAL_BANK', 'https://www.tcmb.gov.tr/api', null, 720, true, '{"policyRate":"TCMB_POLICY","lateWindow":"TCMB_LATE"}'),
+                ('cbr', 'Central Bank of Russia', 'CENTRAL_BANK', 'https://www.cbr.ru/api', null, 720, true, '{"keyRate":"CBR_KEY","refinancingRate":"CBR_REFINANCING"}'),
+
+                -- Latin American Central Banks
+                ('bcra', 'Banco Central de Argentina', 'CENTRAL_BANK', 'https://www.bcra.gob.ar/api', null, 720, true, '{"badlar":"BCRA_BADLAR","tm20":"BCRA_TM20"}'),
+                ('bcc', 'Banco Central de Chile', 'CENTRAL_BANK', 'https://www.bcentral.cl/api', null, 720, true, '{"tpm":"BCC_TPM","tabNominal":"BCC_TAB"}'),
+                ('brc', 'Banco de la Republica Colombia', 'CENTRAL_BANK', 'https://www.banrep.gov.co/api', null, 720, true, '{"policyRate":"BRC_POLICY","dtf":"BRC_DTF"}'),
+                ('bcrp', 'Banco Central de Reserva del Peru', 'CENTRAL_BANK', 'https://www.bcrp.gob.pe/api', null, 720, true, '{"referenceRate":"BCRP_REF","interbankRate":"BCRP_INTERBANK"}'),
+
+                -- Oceania Central Banks
+                ('rbnz', 'Reserve Bank of New Zealand', 'CENTRAL_BANK', 'https://www.rbnz.govt.nz/api', null, 720, true, '{"ocr":"RBNZ_OCR","floatingMortgage":"RBNZ_FLOATING"}'),
+
+                -- Data Aggregators
+                ('investing', 'Investing.com', 'AGGREGATOR', 'https://api.investing.com/v1', 'INVESTING_API_KEY', 60, true, '{"forex":"INVESTING_FX","indices":"INVESTING_IDX","commodities":"INVESTING_CMD"}'),
+                ('xe', 'XE Currency', 'FOREX', 'https://xecdapi.xe.com/v1', 'XE_API_KEY', 60, true, '{"usdeur":"XE_USDEUR","usdgbp":"XE_USDGBP","usdjpy":"XE_USDJPY"}'),
+                ('openexchange', 'Open Exchange Rates', 'FOREX', 'https://openexchangerates.org/api', 'OPENEXCHANGE_API_KEY', 60, true, '{"latest":"OER_LATEST","historical":"OER_HISTORICAL"}'),
+                ('currencylayer', 'CurrencyLayer', 'FOREX', 'https://api.currencylayer.com', 'CURRENCYLAYER_API_KEY', 60, true, '{"live":"CL_LIVE","historical":"CL_HISTORICAL"}')
+              ON CONFLICT (id) DO NOTHING;
