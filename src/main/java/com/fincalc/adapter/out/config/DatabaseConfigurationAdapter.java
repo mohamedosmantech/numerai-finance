@@ -13,7 +13,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -53,8 +55,12 @@ public class DatabaseConfigurationAdapter implements ConfigurationPort {
 
     @Override
     public void saveCountry(Country country) {
-        // Read-only from database for now
         log.warn("saveCountry called but database is read-only via migrations");
+    }
+
+    @Override
+    public void deleteCountry(String countryCode) {
+        log.warn("deleteCountry called but database is read-only via migrations");
     }
 
     @Override
@@ -92,6 +98,19 @@ public class DatabaseConfigurationAdapter implements ConfigurationPort {
     }
 
     @Override
+    public List<RateProvider> getEnabledRateProviders() {
+        return rateProviderRepository.findAll().stream()
+                .map(this::toRateProvider)
+                .filter(RateProvider::enabled)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void enableRateProvider(String providerId, boolean enabled) {
+        log.warn("enableRateProvider called but database is read-only via migrations");
+    }
+
+    @Override
     public Optional<LocalizedMessage> getMessage(String key) {
         return messageRepository.findById(key).map(this::toMessage);
     }
@@ -109,7 +128,27 @@ public class DatabaseConfigurationAdapter implements ConfigurationPort {
     }
 
     @Override
-    public Optional<ResponseTemplate> getTemplate(String id) {
+    public List<LocalizedMessage> getMessagesByCategory(String category) {
+        return messageRepository.findAll().stream()
+                .filter(m -> category.equals(m.getCategory()))
+                .map(this::toMessage)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void deleteMessage(String key) {
+        log.warn("deleteMessage called but database is read-only via migrations");
+    }
+
+    @Override
+    public String getTranslation(String key, String languageCode) {
+        return messageRepository.findById(key)
+                .map(m -> parseTranslations(m.getTranslationsJson()).getOrDefault(languageCode, key))
+                .orElse(key);
+    }
+
+    @Override
+    public Optional<ResponseTemplate> getTemplate(String toolName, String countryCode, String languageCode) {
         return Optional.empty(); // Templates not in DB yet
     }
 
@@ -121,6 +160,12 @@ public class DatabaseConfigurationAdapter implements ConfigurationPort {
     @Override
     public void saveTemplate(ResponseTemplate template) {
         log.warn("saveTemplate called but database is read-only via migrations");
+    }
+
+    @Override
+    public void refreshCache() {
+        log.info("Refreshing database configuration cache...");
+        // Database adapter doesn't need manual cache refresh - data is queried directly
     }
 
     // Entity to Domain conversions
@@ -160,9 +205,9 @@ public class DatabaseConfigurationAdapter implements ConfigurationPort {
                 e.getType(),
                 e.getBaseUrl(),
                 e.getApiKeyEnvVar(),
+                seriesMapping,
                 e.getCacheDurationMinutes(),
-                e.isEnabled(),
-                seriesMapping
+                e.isEnabled()
         );
     }
 
