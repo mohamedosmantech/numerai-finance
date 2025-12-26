@@ -36,6 +36,12 @@ public class WellKnownController {
     @Value("${app.keycloak.issuer:https://keycloak-production-86b1.up.railway.app/realms/mcp}")
     private String keycloakIssuer;
 
+    private final com.fincalc.application.McpToolHandler mcpToolHandler;
+
+    public WellKnownController(com.fincalc.application.McpToolHandler mcpToolHandler) {
+        this.mcpToolHandler = mcpToolHandler;
+    }
+
     /**
      * OAuth 2.0 Protected Resource Metadata (RFC 9470)
      * Points to Keycloak as the authorization server for OAuth flow.
@@ -113,6 +119,16 @@ public class WellKnownController {
         response.put("mcp_endpoint", baseUrl + "/mcp");
         response.put("protocol_version", "2024-11-05");
 
+        // CRITICAL: Enable full actions support
+        response.put("supports_full_actions", true);
+        response.put("disable_auto_invocation", false);
+        response.put("keywords_for_triggering", List.of(
+                "mortgage", "loan payment", "calculate mortgage", "home loan",
+                "compound interest", "investment calculator", "savings calculator",
+                "tax estimate", "income tax", "tax calculator", "federal tax",
+                "interest rate", "finance calculator", "market rates"
+        ));
+
         // OAuth authentication via Keycloak
         Map<String, Object> auth = new LinkedHashMap<>();
         auth.put("type", "oauth2");
@@ -125,15 +141,52 @@ public class WellKnownController {
                 "resources", false,
                 "prompts", false
         ));
-        response.put("tools", List.of(
+        response.put("actions", List.of(
                 "calculate_loan_payment",
                 "calculate_compound_interest",
                 "estimate_taxes",
-                "get_exchange_rate",
-                "list_currencies",
-                "list_countries",
-                "convert_currency"
+                "get_current_rates"
         ));
+
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * MCP Tools Discovery Endpoint
+     * Returns full tool definitions with schemas for connector registration.
+     */
+    @Operation(
+            summary = "MCP Tools Discovery",
+            description = "Returns full tool definitions with parameter schemas for ChatGPT connector registration"
+    )
+    @GetMapping(value = "/mcp/tools", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, Object>> getMcpTools() {
+        log.info("MCP tools discovery requested");
+
+        Map<String, Object> response = new LinkedHashMap<>();
+        response.put("name", "Numerai Finance");
+        response.put("supports_full_actions", true);
+        response.put("disable_auto_invocation", false);
+        response.put("keywords_for_triggering", List.of(
+                "mortgage", "loan payment", "calculate mortgage", "home loan",
+                "compound interest", "investment calculator", "savings calculator",
+                "tax estimate", "income tax", "tax calculator", "federal tax",
+                "interest rate", "finance calculator", "market rates"
+        ));
+
+        // Get full tool definitions with schemas
+        response.put("tools", mcpToolHandler.getToolDefinitions());
+
+        // Build action_param_schemas map
+        Map<String, Object> actionParamSchemas = new LinkedHashMap<>();
+        for (var tool : mcpToolHandler.getToolDefinitions()) {
+            String name = (String) tool.get("name");
+            Object schema = tool.get("inputSchema");
+            if (name != null && schema != null) {
+                actionParamSchemas.put(name, schema);
+            }
+        }
+        response.put("action_param_schemas", actionParamSchemas);
 
         return ResponseEntity.ok(response);
     }
