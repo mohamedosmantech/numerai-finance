@@ -92,20 +92,37 @@ public class McpToolHandler {
         };
     }
 
+    // Default values for tool inputs
+    private static final BigDecimal DEFAULT_PRINCIPAL = new BigDecimal("100000");
+    private static final BigDecimal DEFAULT_ANNUAL_RATE = new BigDecimal("6.5");
+    private static final int DEFAULT_YEARS = 30;
+    private static final int DEFAULT_COMPOUNDING_FREQUENCY = 12;
+    private static final BigDecimal DEFAULT_MONTHLY_CONTRIBUTION = BigDecimal.ZERO;
+    private static final BigDecimal DEFAULT_GROSS_INCOME = new BigDecimal("75000");
+    private static final String DEFAULT_FILING_STATUS = "single";
+    private static final String DEFAULT_COUNTRY = "US";
+    private static final String DEFAULT_LANGUAGE = "en";
+
     private Map<String, Object> executeLoanPayment(Map<String, Object> args, ChatGptRequestContext context) {
-        var command = new CalculateLoanPaymentUseCase.Command(
-                toBigDecimal(args.get("principal")),
-                toBigDecimal(args.get("annualRate")),
-                toInt(args.get("years"))
-        );
+        // Track which defaults are used
+        Map<String, Object> defaultsUsed = new LinkedHashMap<>();
+
+        BigDecimal principal = getOrDefault(args, "principal", DEFAULT_PRINCIPAL, defaultsUsed);
+        BigDecimal annualRate = getOrDefault(args, "annualRate", DEFAULT_ANNUAL_RATE, defaultsUsed);
+        int years = getOrDefaultInt(args, "years", DEFAULT_YEARS, defaultsUsed);
+
+        var command = new CalculateLoanPaymentUseCase.Command(principal, annualRate, years);
         validateCommand(command);
 
         LoanCalculation result = loanPaymentUseCase.execute(command);
         NumberFormat currencyFmt = getCurrencyFormatter(context);
 
+        // Build defaults notice if any were used
+        String defaultsNotice = buildDefaultsNotice(defaultsUsed);
+
         String text = String.format("""
                 **Loan Payment Calculator**
-
+                %s
                 **Loan Details:**
                 - Principal: %s
                 - Interest Rate: %s%% APR
@@ -119,6 +136,7 @@ public class McpToolHandler {
                 ---
                 _Calculation: Standard amortization formula | Provider: Numerai Finance_
                 """,
+                defaultsNotice,
                 currencyFmt.format(result.principal()),
                 result.annualRate(),
                 result.years(),
@@ -128,13 +146,18 @@ public class McpToolHandler {
                 currencyFmt.format(result.totalInterest())
         );
 
+        // Build input map with defaults info
+        Map<String, Object> inputMap = new LinkedHashMap<>();
+        inputMap.put("principal", result.principal());
+        inputMap.put("annualRate", result.annualRate());
+        inputMap.put("years", result.years());
+        if (!defaultsUsed.isEmpty()) {
+            inputMap.put("defaultsUsed", defaultsUsed);
+        }
+
         return buildToolResponse("calculate_loan_payment", text,
                 Map.of(
-                        "input", Map.of(
-                                "principal", result.principal(),
-                                "annualRate", result.annualRate(),
-                                "years", result.years()
-                        ),
+                        "input", inputMap,
                         "result", Map.of(
                                 "monthlyPayment", result.monthlyPayment(),
                                 "totalPayment", result.totalPayment(),
@@ -145,31 +168,40 @@ public class McpToolHandler {
                                 "method", "Standard Amortization Formula"
                         )
                 ),
-                context
+                context, defaultsUsed
         );
     }
 
     private Map<String, Object> executeCompoundInterest(Map<String, Object> args, ChatGptRequestContext context) {
+        // Track which defaults are used
+        Map<String, Object> defaultsUsed = new LinkedHashMap<>();
+
+        BigDecimal principal = getOrDefault(args, "principal", DEFAULT_PRINCIPAL, defaultsUsed);
+        BigDecimal annualRate = getOrDefault(args, "annualRate", new BigDecimal("7.0"), defaultsUsed);
+        int years = getOrDefaultInt(args, "years", 10, defaultsUsed);
+        int compoundingFrequency = getOrDefaultInt(args, "compoundingFrequency", DEFAULT_COMPOUNDING_FREQUENCY, defaultsUsed);
+        BigDecimal monthlyContribution = getOrDefault(args, "monthlyContribution", DEFAULT_MONTHLY_CONTRIBUTION, defaultsUsed);
+
         var command = new CalculateCompoundInterestUseCase.Command(
-                toBigDecimal(args.get("principal")),
-                toBigDecimal(args.get("annualRate")),
-                toInt(args.get("years")),
-                args.containsKey("compoundingFrequency") ? toInt(args.get("compoundingFrequency")) : 12,
-                args.containsKey("monthlyContribution") ? toBigDecimal(args.get("monthlyContribution")) : BigDecimal.ZERO
+                principal, annualRate, years, compoundingFrequency, monthlyContribution
         );
         validateCommand(command);
 
         CompoundInterestCalculation result = compoundInterestUseCase.execute(command);
         NumberFormat currencyFmt = getCurrencyFormatter(context);
 
+        // Build defaults notice
+        String defaultsNotice = buildDefaultsNotice(defaultsUsed);
+
         StringBuilder text = new StringBuilder(String.format("""
                 **Investment Growth Calculator**
-
+                %s
                 **Investment Details:**
                 - Initial Investment: %s
                 - Annual Return: %s%% (%s compounding)
                 - Time Period: %d years
                 """,
+                defaultsNotice,
                 currencyFmt.format(result.principal()),
                 result.annualRate(),
                 result.compoundingLabel(),
@@ -197,15 +229,20 @@ public class McpToolHandler {
                 result.effectiveAnnualRate()
         ));
 
+        // Build input map with defaults info
+        Map<String, Object> inputMap = new LinkedHashMap<>();
+        inputMap.put("principal", result.principal());
+        inputMap.put("annualRate", result.annualRate());
+        inputMap.put("years", result.years());
+        inputMap.put("compoundingFrequency", result.compoundingFrequency());
+        inputMap.put("monthlyContribution", result.monthlyContribution());
+        if (!defaultsUsed.isEmpty()) {
+            inputMap.put("defaultsUsed", defaultsUsed);
+        }
+
         return buildToolResponse("calculate_compound_interest", text.toString(),
                 Map.of(
-                        "input", Map.of(
-                                "principal", result.principal(),
-                                "annualRate", result.annualRate(),
-                                "years", result.years(),
-                                "compoundingFrequency", result.compoundingFrequency(),
-                                "monthlyContribution", result.monthlyContribution()
-                        ),
+                        "input", inputMap,
                         "result", Map.of(
                                 "futureValue", result.futureValue(),
                                 "totalContributions", result.totalContributions(),
@@ -217,21 +254,33 @@ public class McpToolHandler {
                                 "method", "Compound Interest Formula with Future Value of Annuity"
                         )
                 ),
-                context
+                context, defaultsUsed
         );
     }
 
     private Map<String, Object> executeTaxEstimation(Map<String, Object> args, ChatGptRequestContext context) {
+        // Track which defaults are used
+        Map<String, Object> defaultsUsed = new LinkedHashMap<>();
+
         // Determine country with fallback strategy
         String countryCode = determineCountryWithFallback(context);
-        boolean usedFallback = isUsingFallbackCountry(context);
+        boolean usedFallbackCountry = isUsingFallbackCountry(context);
+        if (usedFallbackCountry) {
+            defaultsUsed.put("country", DEFAULT_COUNTRY);
+        }
 
-        var command = new EstimateTaxesUseCase.Command(
-                toBigDecimal(args.get("grossIncome")),
-                (String) args.get("filingStatus"),
-                args.containsKey("deductions") ? toBigDecimal(args.get("deductions")) : null,
-                args.containsKey("state") ? (String) args.get("state") : null
-        );
+        // Get language with fallback
+        String language = context != null ? context.getLanguageCode() : DEFAULT_LANGUAGE;
+        if (context == null || context.getLanguageCode() == null) {
+            defaultsUsed.put("language", DEFAULT_LANGUAGE);
+        }
+
+        BigDecimal grossIncome = getOrDefault(args, "grossIncome", DEFAULT_GROSS_INCOME, defaultsUsed);
+        String filingStatus = getOrDefaultString(args, "filingStatus", DEFAULT_FILING_STATUS, defaultsUsed);
+        BigDecimal deductions = args.containsKey("deductions") ? toBigDecimal(args.get("deductions")) : null;
+        String state = args.containsKey("state") ? (String) args.get("state") : null;
+
+        var command = new EstimateTaxesUseCase.Command(grossIncome, filingStatus, deductions, state);
         validateCommand(command);
 
         TaxEstimation result = taxesUseCase.execute(command);
@@ -239,13 +288,10 @@ public class McpToolHandler {
 
         StringBuilder text = new StringBuilder();
 
-        // Add fallback notice if applicable
-        if (usedFallback) {
-            text.append("""
-                > **Note:** Country not detected from your request. Using **United States (US)** tax rates as default.
-                > For other countries, please specify your country in the request.
-
-                """);
+        // Build defaults notice
+        String defaultsNotice = buildDefaultsNotice(defaultsUsed);
+        if (!defaultsNotice.isEmpty()) {
+            text.append(defaultsNotice).append("\n");
         }
 
         text.append(String.format("""
@@ -295,13 +341,16 @@ public class McpToolHandler {
                 _Data source: IRS 2025 Tax Brackets | Provider: Numerai Finance_
                 """);
 
-        Map<String, Object> inputMap = new HashMap<>();
+        Map<String, Object> inputMap = new LinkedHashMap<>();
         inputMap.put("grossIncome", result.grossIncome());
         inputMap.put("filingStatus", result.filingStatus().name().toLowerCase());
         inputMap.put("deductions", result.deductions());
         inputMap.put("state", result.state() != null ? result.state() : "");
         inputMap.put("country", countryCode);
-        inputMap.put("usedFallbackCountry", usedFallback);
+        inputMap.put("language", language);
+        if (!defaultsUsed.isEmpty()) {
+            inputMap.put("defaultsUsed", defaultsUsed);
+        }
 
         return buildToolResponse("estimate_taxes", text.toString(),
                 Map.of(
@@ -321,7 +370,7 @@ public class McpToolHandler {
                                 "lastUpdated", "2025-01-01"
                         )
                 ),
-                context, usedFallback
+                context, defaultsUsed
         );
     }
 
@@ -351,14 +400,31 @@ public class McpToolHandler {
     }
 
     private Map<String, Object> executeGetCurrentRates(Map<String, Object> args, ChatGptRequestContext context) {
+        // Track defaults used (headers/context)
+        Map<String, Object> defaultsUsed = new LinkedHashMap<>();
+
+        // Get context info with fallbacks
+        String country = context != null ? context.getCountryCode() : DEFAULT_COUNTRY;
+        String language = context != null ? context.getLanguageCode() : DEFAULT_LANGUAGE;
+        String currency = context != null ? context.getCurrency() : "USD";
+
+        if (context == null) {
+            defaultsUsed.put("country", DEFAULT_COUNTRY);
+            defaultsUsed.put("language", DEFAULT_LANGUAGE);
+            defaultsUsed.put("currency", "USD");
+        }
+
         Map<String, BigDecimal> rates = marketRatePort.getAllCurrentRates();
         String lastUpdate = marketRatePort.getLastUpdateDate();
 
-        StringBuilder text = new StringBuilder("""
-                **Current Market Rates**
+        // Build defaults notice
+        String defaultsNotice = buildDefaultsNotice(defaultsUsed);
 
+        StringBuilder text = new StringBuilder(String.format("""
+                **Current Market Rates**
+                %s
                 **Mortgage Rates (National Average):**
-                """);
+                """, defaultsNotice));
 
         rates.forEach((name, rate) -> {
             String displayName = formatRateName(name);
@@ -376,8 +442,18 @@ public class McpToolHandler {
                 _Data source: FRED API | Provider: Numerai Finance_
                 """, lastUpdate));
 
+        // Build input map with context info
+        Map<String, Object> inputMap = new LinkedHashMap<>();
+        inputMap.put("country", country);
+        inputMap.put("language", language);
+        inputMap.put("currency", currency);
+        if (!defaultsUsed.isEmpty()) {
+            inputMap.put("defaultsUsed", defaultsUsed);
+        }
+
         return buildToolResponse("get_current_rates", text.toString(),
                 Map.of(
+                        "input", inputMap,
                         "lastUpdated", lastUpdate,
                         "rates", rates,
                         "dataSource", Map.of(
@@ -387,7 +463,7 @@ public class McpToolHandler {
                                 "updateFrequency", "Daily"
                         )
                 ),
-                context
+                context, defaultsUsed
         );
     }
 
@@ -409,13 +485,13 @@ public class McpToolHandler {
      * Builds a standardized tool response with OpenAI-specific metadata.
      */
     private Map<String, Object> buildToolResponse(String toolName, String textContent, Map<String, Object> structuredContent, ChatGptRequestContext context) {
-        return buildToolResponse(toolName, textContent, structuredContent, context, false);
+        return buildToolResponse(toolName, textContent, structuredContent, context, Map.of());
     }
 
     /**
-     * Builds a standardized tool response with OpenAI-specific metadata and fallback indicator.
+     * Builds a standardized tool response with OpenAI-specific metadata and defaults tracking.
      */
-    private Map<String, Object> buildToolResponse(String toolName, String textContent, Map<String, Object> structuredContent, ChatGptRequestContext context, boolean usedFallback) {
+    private Map<String, Object> buildToolResponse(String toolName, String textContent, Map<String, Object> structuredContent, ChatGptRequestContext context, Map<String, Object> defaultsUsed) {
         var response = new LinkedHashMap<String, Object>();
         response.put("content", List.of(Map.of("type", "text", "text", textContent)));
         response.put("structuredContent", structuredContent);
@@ -436,16 +512,95 @@ public class McpToolHandler {
             if (context.getRequestId() != null) {
                 metaMap.put("requestId", context.getRequestId());
             }
+        } else {
+            metaMap.put("country", DEFAULT_COUNTRY);
+            metaMap.put("language", DEFAULT_LANGUAGE);
+            metaMap.put("currency", "USD");
         }
 
-        // Add fallback indicator if used
-        if (usedFallback) {
-            metaMap.put("usedFallbackCountry", true);
-            metaMap.put("fallbackCountry", "US");
+        // Add defaults used if any
+        if (defaultsUsed != null && !defaultsUsed.isEmpty()) {
+            metaMap.put("defaultsUsed", defaultsUsed);
         }
 
         response.put("_meta", metaMap);
         return response;
+    }
+
+    // ============ Helper methods for default value handling ============
+
+    /**
+     * Get BigDecimal value from args or use default, tracking when default is used.
+     */
+    private BigDecimal getOrDefault(Map<String, Object> args, String key, BigDecimal defaultValue, Map<String, Object> defaultsUsed) {
+        Object value = args.get(key);
+        if (value == null) {
+            defaultsUsed.put(key, defaultValue);
+            return defaultValue;
+        }
+        return toBigDecimal(value);
+    }
+
+    /**
+     * Get int value from args or use default, tracking when default is used.
+     */
+    private int getOrDefaultInt(Map<String, Object> args, String key, int defaultValue, Map<String, Object> defaultsUsed) {
+        Object value = args.get(key);
+        if (value == null) {
+            defaultsUsed.put(key, defaultValue);
+            return defaultValue;
+        }
+        return toInt(value);
+    }
+
+    /**
+     * Get String value from args or use default, tracking when default is used.
+     */
+    private String getOrDefaultString(Map<String, Object> args, String key, String defaultValue, Map<String, Object> defaultsUsed) {
+        Object value = args.get(key);
+        if (value == null || (value instanceof String s && s.isBlank())) {
+            defaultsUsed.put(key, defaultValue);
+            return defaultValue;
+        }
+        return value.toString();
+    }
+
+    /**
+     * Build a notice string for defaults that were used.
+     */
+    private String buildDefaultsNotice(Map<String, Object> defaultsUsed) {
+        if (defaultsUsed == null || defaultsUsed.isEmpty()) {
+            return "";
+        }
+
+        StringBuilder notice = new StringBuilder("> **Note:** Using default values for: ");
+        List<String> items = new ArrayList<>();
+        defaultsUsed.forEach((key, value) -> {
+            String displayKey = formatKeyForDisplay(key);
+            items.add(String.format("%s=%s", displayKey, value));
+        });
+        notice.append(String.join(", ", items));
+        notice.append("\n");
+        return notice.toString();
+    }
+
+    /**
+     * Format parameter key for user-friendly display.
+     */
+    private String formatKeyForDisplay(String key) {
+        return switch (key) {
+            case "principal" -> "principal";
+            case "annualRate" -> "annual rate";
+            case "years" -> "term (years)";
+            case "compoundingFrequency" -> "compounding frequency";
+            case "monthlyContribution" -> "monthly contribution";
+            case "grossIncome" -> "gross income";
+            case "filingStatus" -> "filing status";
+            case "country" -> "country";
+            case "language" -> "language";
+            case "currency" -> "currency";
+            default -> key;
+        };
     }
 
     private Map<String, Object> createLoanPaymentToolDef() {
