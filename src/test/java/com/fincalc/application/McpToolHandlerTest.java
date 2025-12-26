@@ -45,13 +45,16 @@ class McpToolHandlerTest {
     @Mock
     private Validator validator;
 
+    @Mock
+    private AnalyticsService analyticsService;
+
     private McpToolHandler handler;
 
     @BeforeEach
     void setUp() {
         // Mock validator to return no violations by default (lenient for tests that don't call validate)
         lenient().when(validator.validate(any())).thenReturn(Collections.emptySet());
-        handler = new McpToolHandler(loanPaymentUseCase, compoundInterestUseCase, taxesUseCase, marketRatePort, validator);
+        handler = new McpToolHandler(loanPaymentUseCase, compoundInterestUseCase, taxesUseCase, marketRatePort, validator, analyticsService);
     }
 
     @Nested
