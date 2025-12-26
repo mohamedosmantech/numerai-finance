@@ -91,13 +91,7 @@ public class SecurityConfig {
         http
             .securityMatcher("/mcp/**")
             .authorizeHttpRequests(auth -> auth
-                // Discovery endpoints are public
-                .requestMatchers("/mcp/.well-known/**").permitAll()
-                // SSE connection endpoint is public (auth happens on message endpoint)
-                .requestMatchers("/mcp", "/mcp/").permitAll()
-                .requestMatchers("/mcp/sessions/**").permitAll()
-                // MCP message endpoints require authentication
-                .requestMatchers("/mcp/messages/**").authenticated()
+                // All MCP endpoints are public (noauth mode for testing)
                 .anyRequest().permitAll()
             )
             .oauth2ResourceServer(oauth2 -> oauth2
