@@ -33,6 +33,7 @@ public class McpToolHandler {
     private final EstimateTaxesUseCase taxesUseCase;
     private final MarketRatePort marketRatePort;
     private final Validator validator;
+    private final AnalyticsService analyticsService;
 
     /**
      * Get currency formatter based on the request context.
@@ -83,6 +84,14 @@ public class McpToolHandler {
                 context != null ? context.getCountryCode() : "unknown",
                 context != null ? context.getLanguageCode() : "unknown");
 
+        // Track tool call asynchronously
+        analyticsService.trackToolCall(toolName);
+
+        // Track country if available
+        if (context != null && context.getCountryCode() != null) {
+            analyticsService.trackCountry(context.getCountryCode());
+        }
+
         return switch (toolName) {
             case "calculate_loan_payment" -> executeLoanPayment(arguments, context);
             case "calculate_compound_interest" -> executeCompoundInterest(arguments, context);
@@ -113,6 +122,9 @@ public class McpToolHandler {
 
         var command = new CalculateLoanPaymentUseCase.Command(principal, annualRate, years);
         validateCommand(command);
+
+        // Track defaults used
+        analyticsService.trackDefaultsUsed(defaultsUsed);
 
         LoanCalculation result = loanPaymentUseCase.execute(command);
         NumberFormat currencyFmt = getCurrencyFormatter(context);
@@ -186,6 +198,9 @@ public class McpToolHandler {
                 principal, annualRate, years, compoundingFrequency, monthlyContribution
         );
         validateCommand(command);
+
+        // Track defaults used
+        analyticsService.trackDefaultsUsed(defaultsUsed);
 
         CompoundInterestCalculation result = compoundInterestUseCase.execute(command);
         NumberFormat currencyFmt = getCurrencyFormatter(context);
@@ -282,6 +297,10 @@ public class McpToolHandler {
 
         var command = new EstimateTaxesUseCase.Command(grossIncome, filingStatus, deductions, state);
         validateCommand(command);
+
+        // Track defaults used and country
+        analyticsService.trackDefaultsUsed(defaultsUsed);
+        analyticsService.trackCountry(countryCode);
 
         TaxEstimation result = taxesUseCase.execute(command);
         NumberFormat currencyFmt = getCurrencyFormatter(context);
@@ -413,6 +432,10 @@ public class McpToolHandler {
             defaultsUsed.put("language", DEFAULT_LANGUAGE);
             defaultsUsed.put("currency", "USD");
         }
+
+        // Track defaults used and currency
+        analyticsService.trackDefaultsUsed(defaultsUsed);
+        analyticsService.trackCurrency(currency);
 
         Map<String, BigDecimal> rates = marketRatePort.getAllCurrentRates();
         String lastUpdate = marketRatePort.getLastUpdateDate();

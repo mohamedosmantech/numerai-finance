@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fincalc.adapter.config.ChatGptRequestContext;
 import com.fincalc.adapter.in.web.dto.JsonRpcRequest;
 import com.fincalc.adapter.in.web.dto.JsonRpcResponse;
+import com.fincalc.application.AnalyticsService;
 import com.fincalc.application.McpToolHandler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -39,6 +40,7 @@ public class McpController {
     private final McpToolHandler toolHandler;
     private final ObjectMapper objectMapper;
     private final ObjectProvider<ChatGptRequestContext> requestContextProvider;
+    private final AnalyticsService analyticsService;
 
     @Operation(
             summary = "Establish MCP connection",
@@ -52,6 +54,9 @@ public class McpController {
 
         sessions.put(sessionId, emitter);
         log.info("New MCP session established: {}", sessionId);
+
+        // Track MCP session
+        analyticsService.trackMcpSession();
 
         emitter.onCompletion(() -> cleanup(sessionId, "completed"));
         emitter.onTimeout(() -> cleanup(sessionId, "timed out"));
@@ -84,6 +89,9 @@ public class McpController {
             @Valid @RequestBody JsonRpcRequest request
     ) {
         log.debug("Received request for session {}: method={}", sessionId, request.method());
+
+        // Track MCP request
+        analyticsService.trackMcpRequest();
 
         SseEmitter emitter = sessions.get(sessionId);
         if (emitter == null) {

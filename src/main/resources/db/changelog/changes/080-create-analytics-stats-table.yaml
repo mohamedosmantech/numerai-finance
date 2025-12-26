@@ -1,0 +1,239 @@
+databaseChangeLog:
+  - changeSet:
+      id: 080-create-analytics-stats-table
+      author: claude
+      changes:
+        # Aggregate counters (all-time totals)
+        - createTable:
+            tableName: analytics_stats
+            columns:
+              - column:
+                  name: id
+                  type: VARCHAR(100)
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: category
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: count
+                  type: BIGINT
+                  defaultValueNumeric: 0
+              - column:
+                  name: last_updated
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+
+        - createIndex:
+            indexName: idx_analytics_category
+            tableName: analytics_stats
+            columns:
+              - column:
+                  name: category
+
+        # Daily stats for time-series (last day, week, month trends)
+        - createTable:
+            tableName: analytics_daily
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: stat_date
+                  type: DATE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: category
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: count
+                  type: BIGINT
+                  defaultValueNumeric: 0
+
+        - createIndex:
+            indexName: idx_daily_date
+            tableName: analytics_daily
+            columns:
+              - column:
+                  name: stat_date
+
+        - addUniqueConstraint:
+            tableName: analytics_daily
+            columnNames: stat_date, category, name
+            constraintName: uk_daily_stat
+
+        # === SEED TOOL STATS ===
+        - insert:
+            tableName: analytics_stats
+            columns:
+              - column: { name: id, value: "tool:calculate_loan_payment" }
+              - column: { name: category, value: "tool" }
+              - column: { name: name, value: "calculate_loan_payment" }
+              - column: { name: count, value: 0 }
+        - insert:
+            tableName: analytics_stats
+            columns:
+              - column: { name: id, value: "tool:calculate_compound_interest" }
+              - column: { name: category, value: "tool" }
+              - column: { name: name, value: "calculate_compound_interest" }
+              - column: { name: count, value: 0 }
+        - insert:
+            tableName: analytics_stats
+            columns:
+              - column: { name: id, value: "tool:estimate_taxes" }
+              - column: { name: category, value: "tool" }
+              - column: { name: name, value: "estimate_taxes" }
+              - column: { name: count, value: 0 }
+        - insert:
+            tableName: analytics_stats
+            columns:
+              - column: { name: id, value: "tool:get_exchange_rate" }
+              - column: { name: category, value: "tool" }
+              - column: { name: name, value: "get_exchange_rate" }
+              - column: { name: count, value: 0 }
+        - insert:
+            tableName: analytics_stats
+            columns:
+              - column: { name: id, value: "tool:list_currencies" }
+              - column: { name: category, value: "tool" }
+              - column: { name: name, value: "list_currencies" }
+              - column: { name: count, value: 0 }
+        - insert:
+            tableName: analytics_stats
+            columns:
+              - column: { name: id, value: "tool:list_countries" }
+              - column: { name: category, value: "tool" }
+              - column: { name: name, value: "list_countries" }
+              - column: { name: count, value: 0 }
+        - insert:
+            tableName: analytics_stats
+            columns:
+              - column: { name: id, value: "tool:convert_currency" }
+              - column: { name: category, value: "tool" }
+              - column: { name: name, value: "convert_currency" }
+              - column: { name: count, value: 0 }
+
+        # === MCP SESSION STATS ===
+        - insert:
+            tableName: analytics_stats
+            columns:
+              - column: { name: id, value: "mcp:sessions" }
+              - column: { name: category, value: "mcp" }
+              - column: { name: name, value: "sessions" }
+              - column: { name: count, value: 0 }
+        - insert:
+            tableName: analytics_stats
+            columns:
+              - column: { name: id, value: "mcp:total_requests" }
+              - column: { name: category, value: "mcp" }
+              - column: { name: name, value: "total_requests" }
+              - column: { name: count, value: 0 }
+
+        # === PAGE VIEWS ===
+        - insert:
+            tableName: analytics_stats
+            columns:
+              - column: { name: id, value: "page:home" }
+              - column: { name: category, value: "page" }
+              - column: { name: name, value: "home" }
+              - column: { name: count, value: 0 }
+        - insert:
+            tableName: analytics_stats
+            columns:
+              - column: { name: id, value: "page:privacy" }
+              - column: { name: category, value: "page" }
+              - column: { name: name, value: "privacy" }
+              - column: { name: count, value: 0 }
+        - insert:
+            tableName: analytics_stats
+            columns:
+              - column: { name: id, value: "page:terms" }
+              - column: { name: category, value: "page" }
+              - column: { name: name, value: "terms" }
+              - column: { name: count, value: 0 }
+
+        # === DEFAULT VALUES USED ===
+        - insert:
+            tableName: analytics_stats
+            columns:
+              - column: { name: id, value: "default:principal" }
+              - column: { name: category, value: "default" }
+              - column: { name: name, value: "principal" }
+              - column: { name: count, value: 0 }
+        - insert:
+            tableName: analytics_stats
+            columns:
+              - column: { name: id, value: "default:annual_rate" }
+              - column: { name: category, value: "default" }
+              - column: { name: name, value: "annual_rate" }
+              - column: { name: count, value: 0 }
+        - insert:
+            tableName: analytics_stats
+            columns:
+              - column: { name: id, value: "default:years" }
+              - column: { name: category, value: "default" }
+              - column: { name: name, value: "years" }
+              - column: { name: count, value: 0 }
+        - insert:
+            tableName: analytics_stats
+            columns:
+              - column: { name: id, value: "default:country" }
+              - column: { name: category, value: "default" }
+              - column: { name: name, value: "country" }
+              - column: { name: count, value: 0 }
+        - insert:
+            tableName: analytics_stats
+            columns:
+              - column: { name: id, value: "default:language" }
+              - column: { name: category, value: "default" }
+              - column: { name: name, value: "language" }
+              - column: { name: count, value: 0 }
+        - insert:
+            tableName: analytics_stats
+            columns:
+              - column: { name: id, value: "default:from_currency" }
+              - column: { name: category, value: "default" }
+              - column: { name: name, value: "from_currency" }
+              - column: { name: count, value: 0 }
+        - insert:
+            tableName: analytics_stats
+            columns:
+              - column: { name: id, value: "default:to_currency" }
+              - column: { name: category, value: "default" }
+              - column: { name: name, value: "to_currency" }
+              - column: { name: count, value: 0 }
+        - insert:
+            tableName: analytics_stats
+            columns:
+              - column: { name: id, value: "default:amount" }
+              - column: { name: category, value: "default" }
+              - column: { name: name, value: "amount" }
+              - column: { name: count, value: 0 }
+        - insert:
+            tableName: analytics_stats
+            columns:
+              - column: { name: id, value: "default:income" }
+              - column: { name: category, value: "default" }
+              - column: { name: name, value: "income" }
+              - column: { name: count, value: 0 }
+
+        # === TOP COUNTRIES USED (will be upserted dynamically) ===
+        # === TOP CURRENCIES USED (will be upserted dynamically) ===
+        # === TOP PROVIDERS USED (will be upserted dynamically) ===

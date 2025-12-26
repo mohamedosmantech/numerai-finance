@@ -2,6 +2,7 @@ package com.fincalc.adapter.in.web;
 
 import com.fincalc.adapter.out.persistence.entity.LegalPageEntity;
 import com.fincalc.adapter.out.persistence.repository.LegalPageRepository;
+import com.fincalc.application.AnalyticsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +20,7 @@ import java.time.format.DateTimeFormatter;
 public class LegalController {
 
     private final LegalPageRepository legalPageRepository;
+    private final AnalyticsService analyticsService;
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("MMMM d, yyyy");
 
     @GetMapping("/privacy")
@@ -37,6 +39,9 @@ public class LegalController {
     }
 
     private String showLegalPage(String slug, Model model) {
+        // Track page view
+        analyticsService.trackPageView(slug);
+
         LegalPageEntity page = legalPageRepository.findById(slug)
                 .orElse(createDefaultPage(slug));
 

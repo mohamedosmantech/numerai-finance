@@ -2,6 +2,7 @@ package com.fincalc.adapter.in.admin;
 
 import com.fincalc.adapter.out.persistence.entity.LegalPageEntity;
 import com.fincalc.adapter.out.persistence.repository.LegalPageRepository;
+import com.fincalc.application.AnalyticsService;
 import com.fincalc.domain.port.out.ConfigurationPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,6 +19,7 @@ public class AdminDashboardController {
 
     private final ConfigurationPort configurationPort;
     private final LegalPageRepository legalPageRepository;
+    private final AnalyticsService analyticsService;
 
     @GetMapping("/login")
     public String login() {
@@ -92,5 +94,14 @@ public class AdminDashboardController {
         legalPageRepository.save(page);
         redirectAttributes.addFlashAttribute("success", "Page saved successfully!");
         return "redirect:/admin/legal";
+    }
+
+    @GetMapping("/analytics")
+    public String analytics(Model model, @AuthenticationPrincipal UserDetails user) {
+        model.addAttribute("username", user != null ? user.getUsername() : "Admin");
+        model.addAttribute("analytics", analyticsService.getDashboardSummary());
+        model.addAttribute("toolTrend", analyticsService.getDailyTrend("tool", 7));
+        model.addAttribute("sessionTrend", analyticsService.getDailyTrend("mcp", 7));
+        return "admin/analytics";
     }
 }

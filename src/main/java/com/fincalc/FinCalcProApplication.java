@@ -2,6 +2,7 @@ package com.fincalc;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 /**
  * FinCalc Pro - Financial Calculator MCP Server for ChatGPT
@@ -14,6 +15,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * Built with hexagonal architecture for clean separation of concerns.
  */
 @SpringBootApplication
+@EnableAsync
 public class FinCalcProApplication {
 
     public static void main(String[] args) {

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: sidebar(${username})}"></nav>
+
+<div class="main-wrapper">
+    <header class="main-header">
+        <h1 class="page-title">Analytics Dashboard</h1>
+        <span class="text-muted">Usage statistics and insights</span>
+    </header>
+
+    <main class="main-content">
+        <!-- Summary Cards -->
+        <div class="row g-4 mb-4">
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="stat-label">Total MCP Sessions</div>
+                            <div class="stat-value" th:text="${analytics.totalMcpSessions}">0</div>
+                        </div>
+                        <div class="stat-icon blue">
+                            <i class="bi bi-plug"></i>
+                        </div>
+                    </div>
+                    <div class="mt-2 small text-muted">
+                        <span th:text="'Today: ' + ${analytics.todaySessions}">Today: 0</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="stat-label">Total Tool Calls</div>
+                            <div class="stat-value" th:text="${analytics.totalMcpRequests}">0</div>
+                        </div>
+                        <div class="stat-icon green">
+                            <i class="bi bi-calculator"></i>
+                        </div>
+                    </div>
+                    <div class="mt-2 small text-muted">
+                        <span th:text="'Today: ' + ${analytics.todayToolCalls}">Today: 0</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="stat-label">Last 7 Days</div>
+                            <div class="stat-value" th:text="${analytics.weekToolCalls}">0</div>
+                        </div>
+                        <div class="stat-icon purple">
+                            <i class="bi bi-calendar-week"></i>
+                        </div>
+                    </div>
+                    <div class="mt-2 small text-muted">tool calls</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="stat-label">Last 30 Days</div>
+                            <div class="stat-value" th:text="${analytics.monthToolCalls}">0</div>
+                        </div>
+                        <div class="stat-icon orange">
+                            <i class="bi bi-calendar-month"></i>
+                        </div>
+                    </div>
+                    <div class="mt-2 small text-muted">tool calls</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="row g-4 mb-4">
+            <div class="col-md-8">
+                <div class="data-card">
+                    <div class="data-card-header">
+                        <h5 class="data-card-title">Tool Usage (Last 7 Days)</h5>
+                    </div>
+                    <div class="card-body" style="padding: 1.5rem;">
+                        <canvas id="toolTrendChart" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="data-card">
+                    <div class="data-card-header">
+                        <h5 class="data-card-title">Top Tools</h5>
+                    </div>
+                    <div class="card-body" style="padding: 1rem;">
+                        <ul class="list-group list-group-flush">
+                            <li th:each="tool : ${analytics.topTools}" class="list-group-item d-flex justify-content-between align-items-center">
+                                <span th:text="${tool.name}">tool_name</span>
+                                <span class="badge bg-primary rounded-pill" th:text="${tool.count}">0</span>
+                            </li>
+                            <li th:if="${#lists.isEmpty(analytics.topTools)}" class="list-group-item text-muted">
+                                No data yet
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Two Column Layout -->
+        <div class="row g-4 mb-4">
+            <!-- Top Countries -->
+            <div class="col-md-4">
+                <div class="data-card">
+                    <div class="data-card-header">
+                        <h5 class="data-card-title">Top Countries</h5>
+                    </div>
+                    <div class="card-body" style="padding: 1rem;">
+                        <ul class="list-group list-group-flush">
+                            <li th:each="country : ${analytics.topCountries}" class="list-group-item d-flex justify-content-between align-items-center">
+                                <span th:text="${country.name}">US</span>
+                                <span class="badge bg-success rounded-pill" th:text="${country.count}">0</span>
+                            </li>
+                            <li th:if="${#lists.isEmpty(analytics.topCountries)}" class="list-group-item text-muted">
+                                No data yet
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top Currencies -->
+            <div class="col-md-4">
+                <div class="data-card">
+                    <div class="data-card-header">
+                        <h5 class="data-card-title">Top Currencies</h5>
+                    </div>
+                    <div class="card-body" style="padding: 1rem;">
+                        <ul class="list-group list-group-flush">
+                            <li th:each="curr : ${analytics.topCurrencies}" class="list-group-item d-flex justify-content-between align-items-center">
+                                <span th:text="${curr.name}">USD</span>
+                                <span class="badge bg-info rounded-pill" th:text="${curr.count}">0</span>
+                            </li>
+                            <li th:if="${#lists.isEmpty(analytics.topCurrencies)}" class="list-group-item text-muted">
+                                No data yet
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Defaults Used -->
+            <div class="col-md-4">
+                <div class="data-card">
+                    <div class="data-card-header">
+                        <h5 class="data-card-title">Default Values Used</h5>
+                    </div>
+                    <div class="card-body" style="padding: 1rem;">
+                        <ul class="list-group list-group-flush">
+                            <li th:each="def : ${analytics.defaultsUsed}" class="list-group-item d-flex justify-content-between align-items-center">
+                                <span th:text="${def.name}">parameter</span>
+                                <span class="badge bg-warning text-dark rounded-pill" th:text="${def.count}">0</span>
+                            </li>
+                            <li th:if="${#lists.isEmpty(analytics.defaultsUsed)}" class="list-group-item text-muted">
+                                No data yet
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Last 7 Days Breakdown -->
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="data-card">
+                    <div class="data-card-header">
+                        <h5 class="data-card-title">Tools (Last 7 Days)</h5>
+                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Tool</th>
+                                <th class="text-end">Calls</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="entry : ${analytics.toolsLast7Days}">
+                                <td th:text="${entry.key}">tool</td>
+                                <td class="text-end" th:text="${entry.value}">0</td>
+                            </tr>
+                            <tr th:if="${#maps.isEmpty(analytics.toolsLast7Days)}">
+                                <td colspan="2" class="text-muted">No data for this period</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="data-card">
+                    <div class="data-card-header">
+                        <h5 class="data-card-title">Countries (Last 7 Days)</h5>
+                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Country</th>
+                                <th class="text-end">Requests</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="entry : ${analytics.countriesLast7Days}">
+                                <td th:text="${entry.key}">US</td>
+                                <td class="text-end" th:text="${entry.value}">0</td>
+                            </tr>
+                            <tr th:if="${#maps.isEmpty(analytics.countriesLast7Days)}">
+                                <td colspan="2" class="text-muted">No data for this period</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<div th:replace="~{fragments/layout :: scripts}"></div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script th:inline="javascript">
+    const toolTrendData = /*[[${toolTrend}]]*/ [];
+
+    if (toolTrendData.length > 0) {
+        const ctx = document.getElementById('toolTrendChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: toolTrendData.map(d => d.date),
+                datasets: [{
+                    label: 'Tool Calls',
+                    data: toolTrendData.map(d => d.count),
+                    borderColor: '#4f46e5',
+                    backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+    }
+</script>
+</body>
+</html>
