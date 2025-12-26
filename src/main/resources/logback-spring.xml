@@ -2,27 +2,18 @@
 <configuration>
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
 
-    <springProperty scope="context" name="appName" source="spring.application.name" defaultValue="fincalc-pro"/>
+    <springProperty scope="context" name="appName" source="spring.application.name" defaultValue="numerai-finance"/>
+    <springProperty scope="context" name="appVersion" source="spring.application.version" defaultValue="1.0.0"/>
+    <springProperty scope="context" name="env" source="spring.profiles.active" defaultValue="default"/>
 
-    <!-- Console appender for local/dev (human-readable) -->
+    <!-- Console appender - plain text with trace info -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%X{traceId:-},%X{spanId:-}] [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} | %5level | ${env} | v${appVersion} | trace=%X{traceId:-none} | session=%X{sessionId:-none} | %logger{24} | %msg%n</pattern>
         </encoder>
     </appender>
 
-    <!-- JSON appender for production (structured logging) -->
-    <appender name="JSON" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
-            <includeMdcKeyName>traceId</includeMdcKeyName>
-            <includeMdcKeyName>spanId</includeMdcKeyName>
-            <includeMdcKeyName>requestId</includeMdcKeyName>
-            <includeMdcKeyName>userId</includeMdcKeyName>
-            <customFields>{"application":"${appName}"}</customFields>
-        </encoder>
-    </appender>
-
-    <!-- Local profile: human-readable console output -->
+    <!-- Local profile -->
     <springProfile name="local">
         <root level="INFO">
             <appender-ref ref="CONSOLE"/>
@@ -30,7 +21,7 @@
         <logger name="com.fincalc" level="DEBUG"/>
     </springProfile>
 
-    <!-- Dev profile: human-readable with more detail -->
+    <!-- Dev profile -->
     <springProfile name="dev">
         <root level="INFO">
             <appender-ref ref="CONSOLE"/>
@@ -39,16 +30,16 @@
         <logger name="org.springframework.web" level="DEBUG"/>
     </springProfile>
 
-    <!-- Production profile: JSON structured logging -->
+    <!-- Production profile: plain text logging -->
     <springProfile name="prod">
         <root level="INFO">
-            <appender-ref ref="JSON"/>
+            <appender-ref ref="CONSOLE"/>
         </root>
         <logger name="com.fincalc" level="INFO"/>
         <logger name="org.springframework.web" level="WARN"/>
     </springProfile>
 
-    <!-- Default (no profile): console output -->
+    <!-- Default -->
     <springProfile name="default">
         <root level="INFO">
             <appender-ref ref="CONSOLE"/>
