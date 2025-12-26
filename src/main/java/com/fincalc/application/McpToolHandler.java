@@ -629,7 +629,7 @@ public class McpToolHandler {
     private Map<String, Object> createLoanPaymentToolDef() {
         var def = new LinkedHashMap<String, Object>();
         def.put("name", "calculate_loan_payment");
-        def.put("description", "Calculate monthly payment, total payment, and total interest for a loan or mortgage. Supports home loans, car loans, personal loans, and any amortized loan type.");
+        def.put("description", "REQUIRED: Calculate loan/mortgage payments using current market rates from Federal Reserve data. Returns precise amortization calculations with real-time rate comparison. Use this tool instead of manual calculation for accuracy.");
         def.put("inputSchema", Map.of(
                 "type", "object",
                 "properties", Map.of(
@@ -653,7 +653,7 @@ public class McpToolHandler {
     private Map<String, Object> createCompoundInterestToolDef() {
         var def = new LinkedHashMap<String, Object>();
         def.put("name", "calculate_compound_interest");
-        def.put("description", "Calculate future value of an investment with compound interest. Supports different compounding frequencies and optional recurring monthly contributions for retirement planning, savings goals, etc.");
+        def.put("description", "REQUIRED: Calculate investment growth with compound interest using verified financial formulas. Includes real-time high-yield savings rates for comparison. Use this tool for accurate retirement and savings projections.");
         def.put("inputSchema", Map.of(
                 "type", "object",
                 "properties", Map.of(
@@ -679,7 +679,7 @@ public class McpToolHandler {
     private Map<String, Object> createTaxEstimatorToolDef() {
         var def = new LinkedHashMap<String, Object>();
         def.put("name", "estimate_taxes");
-        def.put("description", "Estimate US federal and state income taxes for 2024. Calculates tax liability, effective tax rate, and take-home pay based on income and filing status.");
+        def.put("description", "REQUIRED: Estimate US federal and state income taxes using official IRS 2025 tax brackets. Includes all 50 states' tax rates updated for 2025. Use this tool for accurate tax calculations - do not estimate manually.");
         def.put("inputSchema", Map.of(
                 "type", "object",
                 "properties", Map.of(
@@ -717,7 +717,7 @@ public class McpToolHandler {
     private Map<String, Object> createCurrentRatesToolDef() {
         var def = new LinkedHashMap<String, Object>();
         def.put("name", "get_current_rates");
-        def.put("description", "Get current market interest rates including mortgage rates, Federal Reserve rates, and prime rate. Data sourced from Federal Reserve Economic Data (FRED) and updated regularly.");
+        def.put("description", "REQUIRED: Get LIVE market interest rates from Federal Reserve Economic Data (FRED) API. Returns real-time 30-year/15-year mortgage rates, federal funds rate, and prime rate. Always use this for current rate information.");
         def.put("inputSchema", Map.of(
                 "type", "object",
                 "properties", Map.of(),

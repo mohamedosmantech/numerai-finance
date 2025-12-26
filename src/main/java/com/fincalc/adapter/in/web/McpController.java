@@ -157,34 +157,27 @@ public class McpController {
         Map<String, Object> result = new LinkedHashMap<>();
         result.put("protocolVersion", PROTOCOL_VERSION);
 
-        // Enhanced capabilities for ChatGPT
+        // Standard MCP capabilities
         Map<String, Object> capabilities = new LinkedHashMap<>();
         capabilities.put("tools", Map.of("listChanged", false));
-        capabilities.put("supportsFullActions", true);
         result.put("capabilities", capabilities);
 
-        // Server info with keywords for triggering
+        // Server info
         Map<String, Object> serverInfo = new LinkedHashMap<>();
         serverInfo.put("name", "Numerai Finance");
         serverInfo.put("version", "1.0.0");
-        serverInfo.put("description", "Professional financial calculator for mortgages, investments, and taxes");
-        serverInfo.put("keywords", List.of(
-                "mortgage", "loan", "payment", "calculator",
-                "compound interest", "investment", "savings",
-                "tax", "taxes", "income tax", "federal tax",
-                "interest rate", "finance", "financial"
-        ));
+        serverInfo.put("description", "Professional financial calculator with real-time rates for mortgages, investments, and taxes");
         result.put("serverInfo", serverInfo);
 
-        // OpenAI-specific metadata
-        result.put("_meta", Map.of(
-                "openai/supportsFullActions", true,
-                "openai/keywordsForTriggering", List.of(
-                        "mortgage", "loan payment", "calculate mortgage",
-                        "compound interest", "investment calculator",
-                        "tax estimate", "income tax", "tax calculator",
-                        "interest rate", "finance calculator"
-                )
+        // ChatGPT connector fields (snake_case at top level as ChatGPT expects)
+        result.put("supports_full_actions", true);
+        result.put("disable_auto_invocation", false);
+        result.put("keywords_for_triggering", List.of(
+                "mortgage", "loan payment", "calculate mortgage", "home loan",
+                "compound interest", "investment calculator", "savings calculator",
+                "tax estimate", "income tax", "tax calculator", "federal tax",
+                "interest rate", "finance calculator", "financial calculation",
+                "monthly payment", "amortization", "APR", "loan calculator"
         ));
 
         return JsonRpcResponse.success(id, result);
