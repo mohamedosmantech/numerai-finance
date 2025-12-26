@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: sidebar(${username})}"></nav>
+
+<div class="main-wrapper">
+    <header class="main-header">
+        <h1 class="page-title">Legal Pages</h1>
+        <span class="text-muted" th:text="${pages != null ? pages.size() + ' pages configured' : '0 pages'}">2 pages configured</span>
+    </header>
+
+    <main class="main-content">
+        <div th:if="${success}" class="alert alert-success" role="alert" th:text="${success}"></div>
+
+        <div class="data-card">
+            <div class="data-card-header">
+                <h5 class="data-card-title">Manage Legal Pages</h5>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Slug</th>
+                        <th>Title</th>
+                        <th>Last Updated</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="p : ${pages}">
+                        <td><code th:text="${p.slug}">privacy</code></td>
+                        <td th:text="${p.title}">Privacy Policy</td>
+                        <td th:text="${p.lastUpdated != null ? #temporals.format(p.lastUpdated, 'MMM d, yyyy HH:mm') : 'Never'}">Dec 26, 2025</td>
+                        <td>
+                            <a th:href="@{/admin/legal/{slug}(slug=${p.slug})}" class="btn btn-sm btn-primary">Edit</a>
+                            <a th:href="@{/{slug}(slug=${p.slug})}" target="_blank" class="btn btn-sm btn-outline-secondary">View</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="mt-4">
+            <h6>Quick Links</h6>
+            <ul>
+                <li><a href="/privacy" target="_blank">Privacy Policy</a></li>
+                <li><a href="/terms" target="_blank">Terms of Service</a></li>
+            </ul>
+        </div>
+    </main>
+</div>
+
+<div th:replace="~{fragments/layout :: scripts}"></div>
+</body>
+</html>

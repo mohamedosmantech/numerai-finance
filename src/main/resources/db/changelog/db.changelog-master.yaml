@@ -33,3 +33,5 @@ databaseChangeLog:
       file: db/changelog/changes/062-add-remaining-providers.yaml
   - include:
       file: db/changelog/changes/063-add-remaining-messages.yaml
+  - include:
+      file: db/changelog/changes/070-create-legal-pages-table.yaml

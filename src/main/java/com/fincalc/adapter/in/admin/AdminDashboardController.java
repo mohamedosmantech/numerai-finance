@@ -1,13 +1,15 @@
 package com.fincalc.adapter.in.admin;
 
+import com.fincalc.adapter.out.persistence.entity.LegalPageEntity;
+import com.fincalc.adapter.out.persistence.repository.LegalPageRepository;
 import com.fincalc.domain.port.out.ConfigurationPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/admin")
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AdminDashboardController {
 
     private final ConfigurationPort configurationPort;
+    private final LegalPageRepository legalPageRepository;
 
     @GetMapping("/login")
     public String login() {
@@ -58,5 +61,36 @@ public class AdminDashboardController {
         model.addAttribute("username", user != null ? user.getUsername() : "Admin");
         model.addAttribute("rateProviders", configurationPort.getAllRateProviders());
         return "admin/rate-providers";
+    }
+
+    @GetMapping("/legal")
+    public String legalPages(Model model, @AuthenticationPrincipal UserDetails user) {
+        model.addAttribute("username", user != null ? user.getUsername() : "Admin");
+        model.addAttribute("pages", legalPageRepository.findAll());
+        return "admin/legal-pages";
+    }
+
+    @GetMapping("/legal/{slug}")
+    public String editLegalPage(@PathVariable String slug, Model model, @AuthenticationPrincipal UserDetails user) {
+        model.addAttribute("username", user != null ? user.getUsername() : "Admin");
+        LegalPageEntity page = legalPageRepository.findById(slug)
+                .orElse(new LegalPageEntity(slug, slug.substring(0, 1).toUpperCase() + slug.substring(1), "", null));
+        model.addAttribute("page", page);
+        return "admin/legal-edit";
+    }
+
+    @PostMapping("/legal/{slug}")
+    public String saveLegalPage(@PathVariable String slug,
+                                @RequestParam String title,
+                                @RequestParam String content,
+                                RedirectAttributes redirectAttributes) {
+        LegalPageEntity page = legalPageRepository.findById(slug)
+                .orElse(new LegalPageEntity());
+        page.setSlug(slug);
+        page.setTitle(title);
+        page.setContent(content);
+        legalPageRepository.save(page);
+        redirectAttributes.addFlashAttribute("success", "Page saved successfully!");
+        return "redirect:/admin/legal";
     }
 }

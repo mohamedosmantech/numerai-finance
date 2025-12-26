@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: sidebar(${username})}"></nav>
+
+<div class="main-wrapper">
+    <header class="main-header">
+        <h1 class="page-title">Edit Legal Page</h1>
+        <a href="/admin/legal" class="btn btn-outline-secondary">&larr; Back to Legal Pages</a>
+    </header>
+
+    <main class="main-content">
+        <div class="data-card">
+            <div class="data-card-header">
+                <h5 class="data-card-title" th:text="'Editing: ' + ${page.title}">Editing: Privacy Policy</h5>
+            </div>
+            <div class="card-body">
+                <form th:action="@{/admin/legal/{slug}(slug=${page.slug})}" method="post">
+                    <div class="mb-3">
+                        <label for="slug" class="form-label">Slug (URL path)</label>
+                        <input type="text" class="form-control" id="slug" th:value="${page.slug}" disabled>
+                        <small class="text-muted">URL will be: /<span th:text="${page.slug}">privacy</span></small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Page Title</label>
+                        <input type="text" class="form-control" id="title" name="title" th:value="${page.title}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="content" class="form-label">Content (HTML)</label>
+                        <textarea class="form-control" id="content" name="content" rows="20" th:text="${page.content}" required></textarea>
+                        <small class="text-muted">Use HTML tags like &lt;h2&gt;, &lt;p&gt;, &lt;ul&gt;, &lt;li&gt;, &lt;strong&gt;, &lt;a href=""&gt;</small>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                        <a th:href="@{/{slug}(slug=${page.slug})}" target="_blank" class="btn btn-outline-secondary">Preview Page</a>
+                        <a href="/admin/legal" class="btn btn-outline-danger">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <div class="data-card">
+                <div class="data-card-header">
+                    <h5 class="data-card-title">HTML Reference</h5>
+                </div>
+                <div class="card-body">
+                    <pre style="background: #f8f9fa; padding: 15px; border-radius: 8px; font-size: 0.85rem;"><code>&lt;h2&gt;Section Title&lt;/h2&gt;
+&lt;p&gt;Paragraph text. Use &lt;strong&gt;bold&lt;/strong&gt; for emphasis.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;List item 1&lt;/li&gt;
+  &lt;li&gt;List item 2&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;a href="https://example.com"&gt;Link text&lt;/a&gt;</code></pre>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<div th:replace="~{fragments/layout :: scripts}"></div>
+</body>
+</html>
