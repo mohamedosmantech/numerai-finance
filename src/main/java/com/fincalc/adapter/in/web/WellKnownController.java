@@ -33,14 +33,16 @@ public class WellKnownController {
     @Value("${app.base-url:https://numerai-finance-production.up.railway.app}")
     private String baseUrl;
 
+    @Value("${app.keycloak.issuer:https://keycloak-production-86b1.up.railway.app/realms/mcp}")
+    private String keycloakIssuer;
+
     /**
      * OAuth 2.0 Protected Resource Metadata (RFC 9470)
-     * For public (no-auth) servers, returns empty authorization_servers array.
-     * This explicitly tells ChatGPT that no authentication is required.
+     * Points to Keycloak as the authorization server for OAuth flow.
      */
     @Operation(
             summary = "OAuth Protected Resource Metadata",
-            description = "Returns OAuth 2.0 protected resource metadata for MCP discovery (RFC 9470). Empty authorization_servers indicates public access."
+            description = "Returns OAuth 2.0 protected resource metadata for MCP discovery (RFC 9470). Points to Keycloak for authentication."
     )
     @GetMapping(value = "/oauth-protected-resource", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String, Object>> getOAuthProtectedResource() {
@@ -48,9 +50,10 @@ public class WellKnownController {
 
         Map<String, Object> response = new LinkedHashMap<>();
         response.put("resource", baseUrl + "/mcp");
-        // Empty array explicitly indicates NO authentication required (public access)
-        response.put("authorization_servers", List.of());
-        response.put("bearer_methods_supported", List.of());
+        // Point to Keycloak as the authorization server
+        response.put("authorization_servers", List.of(keycloakIssuer));
+        response.put("bearer_methods_supported", List.of("header"));
+        response.put("scopes_supported", List.of("openid", "profile", "email"));
         response.put("resource_documentation", "https://github.com/numerai-finance/fincalc-pro");
 
         return ResponseEntity.ok(response);
@@ -58,46 +61,38 @@ public class WellKnownController {
 
     /**
      * OAuth Authorization Server Metadata (RFC 8414)
-     * For no-auth servers, returns minimal metadata.
+     * Redirects to Keycloak's authorization server metadata.
      */
     @Operation(
             summary = "OAuth Authorization Server Metadata",
-            description = "Returns OAuth 2.0 authorization server metadata (RFC 8414)"
+            description = "Redirects to Keycloak authorization server metadata (RFC 8414)"
     )
     @GetMapping(value = "/oauth-authorization-server", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Map<String, Object>> getOAuthAuthorizationServer() {
-        log.info("OAuth authorization server metadata requested");
+    public ResponseEntity<Void> getOAuthAuthorizationServer() {
+        log.info("OAuth authorization server metadata requested - redirecting to Keycloak");
 
-        // For a public server, return minimal metadata indicating no auth flow
-        Map<String, Object> response = new LinkedHashMap<>();
-        response.put("issuer", baseUrl);
-        response.put("response_types_supported", List.of());
-        response.put("grant_types_supported", List.of());
-        response.put("scopes_supported", List.of());
-        response.put("token_endpoint_auth_methods_supported", List.of());
-
-        return ResponseEntity.ok(response);
+        // Redirect to Keycloak's well-known endpoint
+        return ResponseEntity.status(302)
+                .header("Location", keycloakIssuer + "/.well-known/openid-configuration")
+                .build();
     }
 
     /**
-     * OpenID Connect Discovery (for completeness)
+     * OpenID Connect Discovery
+     * Redirects to Keycloak's OpenID configuration.
      */
     @Operation(
             summary = "OpenID Connect Discovery",
-            description = "Returns OpenID Connect discovery metadata"
+            description = "Redirects to Keycloak OpenID Connect discovery metadata"
     )
     @GetMapping(value = "/openid-configuration", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Map<String, Object>> getOpenIdConfiguration() {
-        log.info("OpenID configuration requested");
+    public ResponseEntity<Void> getOpenIdConfiguration() {
+        log.info("OpenID configuration requested - redirecting to Keycloak");
 
-        Map<String, Object> response = new LinkedHashMap<>();
-        response.put("issuer", baseUrl);
-        response.put("response_types_supported", List.of());
-        response.put("grant_types_supported", List.of());
-        response.put("scopes_supported", List.of());
-        response.put("subject_types_supported", List.of("public"));
-
-        return ResponseEntity.ok(response);
+        // Redirect to Keycloak's well-known endpoint
+        return ResponseEntity.status(302)
+                .header("Location", keycloakIssuer + "/.well-known/openid-configuration")
+                .build();
     }
 
     /**
@@ -118,10 +113,11 @@ public class WellKnownController {
         response.put("mcp_endpoint", baseUrl + "/mcp");
         response.put("protocol_version", "2024-11-05");
 
-        // Explicitly declare no authentication required
+        // OAuth authentication via Keycloak
         Map<String, Object> auth = new LinkedHashMap<>();
-        auth.put("type", "noauth");
-        auth.put("description", "This MCP server is publicly accessible");
+        auth.put("type", "oauth2");
+        auth.put("authorization_server", keycloakIssuer);
+        auth.put("description", "OAuth 2.1 authentication via Keycloak");
         response.put("authentication", auth);
 
         response.put("capabilities", Map.of(

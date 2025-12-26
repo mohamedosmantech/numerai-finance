@@ -186,6 +186,7 @@ public class McpController {
     // ============= OAuth Discovery Endpoints (relative to /mcp) =============
 
     private static final String BASE_URL = "https://numerai-finance-production.up.railway.app";
+    private static final String KEYCLOAK_ISSUER = "https://keycloak-production-86b1.up.railway.app/realms/mcp";
 
     @Operation(summary = "OAuth Protected Resource Metadata (at /mcp path)",
             description = "Returns OAuth 2.0 protected resource metadata for MCP discovery")
@@ -195,42 +196,33 @@ public class McpController {
 
         Map<String, Object> response = new LinkedHashMap<>();
         response.put("resource", BASE_URL + "/mcp");
-        response.put("authorization_servers", List.of());
-        response.put("bearer_methods_supported", List.of());
+        response.put("authorization_servers", List.of(KEYCLOAK_ISSUER));
+        response.put("bearer_methods_supported", List.of("header"));
+        response.put("scopes_supported", List.of("openid", "profile", "email"));
         response.put("resource_documentation", "https://github.com/numerai-finance/fincalc-pro");
 
         return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "OAuth Authorization Server Metadata (at /mcp path)",
-            description = "Returns OAuth 2.0 authorization server metadata")
+            description = "Redirects to Keycloak authorization server metadata")
     @GetMapping(value = "/.well-known/oauth-authorization-server", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Map<String, Object>> mcpOAuthAuthorizationServer() {
-        log.info("OAuth authorization server metadata requested at /mcp path");
+    public ResponseEntity<Void> mcpOAuthAuthorizationServer() {
+        log.info("OAuth authorization server metadata requested at /mcp path - redirecting to Keycloak");
 
-        Map<String, Object> response = new LinkedHashMap<>();
-        response.put("issuer", BASE_URL);
-        response.put("response_types_supported", List.of());
-        response.put("grant_types_supported", List.of());
-        response.put("scopes_supported", List.of());
-        response.put("token_endpoint_auth_methods_supported", List.of());
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.status(302)
+                .header("Location", KEYCLOAK_ISSUER + "/.well-known/openid-configuration")
+                .build();
     }
 
     @Operation(summary = "OpenID Configuration (at /mcp path)",
-            description = "Returns OpenID Connect discovery metadata")
+            description = "Redirects to Keycloak OpenID Connect discovery metadata")
     @GetMapping(value = "/.well-known/openid-configuration", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Map<String, Object>> mcpOpenIdConfiguration() {
-        log.info("OpenID configuration requested at /mcp path");
+    public ResponseEntity<Void> mcpOpenIdConfiguration() {
+        log.info("OpenID configuration requested at /mcp path - redirecting to Keycloak");
 
-        Map<String, Object> response = new LinkedHashMap<>();
-        response.put("issuer", BASE_URL);
-        response.put("response_types_supported", List.of());
-        response.put("grant_types_supported", List.of());
-        response.put("scopes_supported", List.of());
-        response.put("subject_types_supported", List.of("public"));
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.status(302)
+                .header("Location", KEYCLOAK_ISSUER + "/.well-known/openid-configuration")
+                .build();
     }
 }
