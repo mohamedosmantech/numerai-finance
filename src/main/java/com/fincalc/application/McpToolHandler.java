@@ -641,7 +641,7 @@ public class McpToolHandler {
                 "additionalProperties", false
         ));
         def.put("annotations", Map.of("destructiveHint", false, "readOnlyHint", true));
-        def.put("securitySchemes", List.of(Map.of("type", "oauth")));
+        def.put("securitySchemes", List.of(Map.of("type", "oauth2")));
         return def;
     }
 
@@ -662,7 +662,7 @@ public class McpToolHandler {
                 "additionalProperties", false
         ));
         def.put("annotations", Map.of("destructiveHint", false, "readOnlyHint", true));
-        def.put("securitySchemes", List.of(Map.of("type", "oauth")));
+        def.put("securitySchemes", List.of(Map.of("type", "oauth2")));
         return def;
     }
 
@@ -682,7 +682,7 @@ public class McpToolHandler {
                 "additionalProperties", false
         ));
         def.put("annotations", Map.of("destructiveHint", false, "readOnlyHint", true));
-        def.put("securitySchemes", List.of(Map.of("type", "oauth")));
+        def.put("securitySchemes", List.of(Map.of("type", "oauth2")));
         return def;
     }
 
@@ -710,7 +710,7 @@ public class McpToolHandler {
                 "additionalProperties", false
         ));
         def.put("annotations", Map.of("destructiveHint", false, "readOnlyHint", true));
-        def.put("securitySchemes", List.of(Map.of("type", "oauth")));
+        def.put("securitySchemes", List.of(Map.of("type", "oauth2")));
         return def;
     }
 }
