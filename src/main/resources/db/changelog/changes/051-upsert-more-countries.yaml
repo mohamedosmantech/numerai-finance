@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 041-upsert-more-countries
+      id: 051-upsert-more-countries
       author: Mohamed Osman
       changes:
         - sql:

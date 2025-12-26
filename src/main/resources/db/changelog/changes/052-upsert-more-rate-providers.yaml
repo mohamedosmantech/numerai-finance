@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 042-upsert-more-rate-providers
+      id: 052-upsert-more-rate-providers
       author: Mohamed Osman
       changes:
         - sql:

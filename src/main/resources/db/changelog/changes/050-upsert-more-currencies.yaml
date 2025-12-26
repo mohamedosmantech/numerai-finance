@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 040-upsert-more-currencies
+      id: 050-upsert-more-currencies
       author: Mohamed Osman
       changes:
         - sql:

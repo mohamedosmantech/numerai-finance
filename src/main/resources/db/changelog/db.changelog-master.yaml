@@ -18,10 +18,10 @@ databaseChangeLog:
   - include:
       file: db/changelog/changes/013-seed-localized-messages.yaml
   - include:
-      file: db/changelog/changes/040-upsert-more-currencies.yaml
+      file: db/changelog/changes/050-upsert-more-currencies.yaml
   - include:
-      file: db/changelog/changes/041-upsert-more-countries.yaml
+      file: db/changelog/changes/051-upsert-more-countries.yaml
   - include:
-      file: db/changelog/changes/042-upsert-more-rate-providers.yaml
+      file: db/changelog/changes/052-upsert-more-rate-providers.yaml
   - include:
-      file: db/changelog/changes/043-upsert-more-localized-messages.yaml
+      file: db/changelog/changes/053-upsert-more-localized-messages.yaml
