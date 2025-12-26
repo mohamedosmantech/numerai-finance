@@ -218,9 +218,10 @@ public class McpController {
 
         Map<String, Object> response = new LinkedHashMap<>();
         response.put("resource", BASE_URL + "/mcp");
-        response.put("authorization_servers", List.of(KEYCLOAK_ISSUER));
-        response.put("bearer_methods_supported", List.of("header"));
-        response.put("scopes_supported", List.of("openid", "profile", "email"));
+        // No authentication required (public access)
+        response.put("authorization_servers", List.of());
+        response.put("bearer_methods_supported", List.of());
+        response.put("scopes_supported", List.of());
         response.put("resource_documentation", "https://github.com/numerai-finance/fincalc-pro");
 
         return ResponseEntity.ok(response);

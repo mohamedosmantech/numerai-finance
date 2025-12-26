@@ -50,10 +50,10 @@ public class WellKnownController {
 
         Map<String, Object> response = new LinkedHashMap<>();
         response.put("resource", baseUrl + "/mcp");
-        // Point to Keycloak as the authorization server
-        response.put("authorization_servers", List.of(keycloakIssuer));
-        response.put("bearer_methods_supported", List.of("header"));
-        response.put("scopes_supported", List.of("openid", "profile", "email"));
+        // No authentication required (public access)
+        response.put("authorization_servers", List.of());
+        response.put("bearer_methods_supported", List.of());
+        response.put("scopes_supported", List.of());
         response.put("resource_documentation", "https://github.com/numerai-finance/fincalc-pro");
 
         return ResponseEntity.ok(response);
