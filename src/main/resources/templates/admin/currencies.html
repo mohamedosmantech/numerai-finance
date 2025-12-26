@@ -32,8 +32,8 @@
                         <td th:text="${c.name()}">US Dollar</td>
                         <td th:text="${c.decimalPlaces()}">2</td>
                         <td>
-                            <span th:if="${c.symbolBefore()}" class="badge bg-info">Symbol First</span>
-                            <span th:unless="${c.symbolBefore()}" class="badge bg-warning text-dark">Symbol After</span>
+                            <span th:if="${c.symbolPrefix()}" class="badge bg-info">Symbol First</span>
+                            <span th:unless="${c.symbolPrefix()}" class="badge bg-warning text-dark">Symbol After</span>
                         </td>
                     </tr>
                 </tbody>
