@@ -158,8 +158,9 @@ public class McpController {
         result.put("protocolVersion", PROTOCOL_VERSION);
         result.put("capabilities", Map.of("tools", Map.of()));
         result.put("serverInfo", Map.of(
-                "name", "fincalc-pro",
-                "version", "1.0.0"
+                "name", "Numerai Finance",
+                "version", "1.0.0",
+                "description", "Professional financial calculator for mortgages, investments, and taxes"
         ));
         return JsonRpcResponse.success(id, result);
     }
