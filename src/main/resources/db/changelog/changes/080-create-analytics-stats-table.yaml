@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: 080-create-analytics-stats-table
-      author: claude
+      author: numerai
       changes:
         # Aggregate counters (all-time totals)
         - createTable:
