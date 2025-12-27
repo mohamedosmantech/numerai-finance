@@ -155,6 +155,19 @@ public class WellKnownController {
      * MCP Tools Discovery Endpoint
      * Returns full tool definitions with schemas for connector registration.
      */
+    /**
+     * OpenAI Apps Domain Verification
+     */
+    @Operation(
+            summary = "OpenAI Apps Domain Verification",
+            description = "Returns verification token for OpenAI Apps submission"
+    )
+    @GetMapping(value = "/openai-apps-challenge", produces = MediaType.TEXT_PLAIN_VALUE)
+    public ResponseEntity<String> getOpenAiAppsChallenge() {
+        log.info("OpenAI Apps domain verification requested");
+        return ResponseEntity.ok("bKcb_1D7vMz3tKzY2Crmk_UfGB8a9y_IOqQMXKUgYKc");
+    }
+
     @Operation(
             summary = "MCP Tools Discovery",
             description = "Returns full tool definitions with parameter schemas for ChatGPT connector registration"
