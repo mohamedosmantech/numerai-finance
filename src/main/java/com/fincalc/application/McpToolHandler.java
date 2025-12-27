@@ -646,6 +646,13 @@ public class McpToolHandler {
                 "openWorldHint", false,
                 "idempotentHint", true
         ));
+        // OpenAI-specific metadata for full actions support
+        def.put("_meta", Map.of(
+                "openai/visibility", "public",
+                "openai/widgetAccessible", false,
+                "openai/toolInvocation/invoking", "Calculating loan payment...",
+                "openai/toolInvocation/invoked", "Loan payment calculated."
+        ));
         def.put("securitySchemes", List.of(Map.of("type", "noauth")));
         return def;
     }
@@ -672,6 +679,13 @@ public class McpToolHandler {
                 "openWorldHint", false,
                 "idempotentHint", true
         ));
+        // OpenAI-specific metadata for full actions support
+        def.put("_meta", Map.of(
+                "openai/visibility", "public",
+                "openai/widgetAccessible", false,
+                "openai/toolInvocation/invoking", "Calculating compound interest...",
+                "openai/toolInvocation/invoked", "Investment growth calculated."
+        ));
         def.put("securitySchemes", List.of(Map.of("type", "noauth")));
         return def;
     }
@@ -696,6 +710,13 @@ public class McpToolHandler {
                 "readOnlyHint", true,
                 "openWorldHint", false,
                 "idempotentHint", true
+        ));
+        // OpenAI-specific metadata for full actions support
+        def.put("_meta", Map.of(
+                "openai/visibility", "public",
+                "openai/widgetAccessible", false,
+                "openai/toolInvocation/invoking", "Estimating taxes...",
+                "openai/toolInvocation/invoked", "Tax estimation complete."
         ));
         def.put("securitySchemes", List.of(Map.of("type", "noauth")));
         return def;
@@ -729,6 +750,13 @@ public class McpToolHandler {
                 "readOnlyHint", true,
                 "openWorldHint", false,
                 "idempotentHint", true
+        ));
+        // OpenAI-specific metadata for full actions support
+        def.put("_meta", Map.of(
+                "openai/visibility", "public",
+                "openai/widgetAccessible", false,
+                "openai/toolInvocation/invoking", "Fetching current market rates...",
+                "openai/toolInvocation/invoked", "Market rates retrieved."
         ));
         def.put("securitySchemes", List.of(Map.of("type", "noauth")));
         return def;

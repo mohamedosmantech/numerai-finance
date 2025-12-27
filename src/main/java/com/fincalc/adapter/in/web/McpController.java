@@ -184,7 +184,32 @@ public class McpController {
     }
 
     private JsonRpcResponse handleToolsList(Object id) {
-        return JsonRpcResponse.success(id, Map.of("tools", toolHandler.getToolDefinitions()));
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("tools", toolHandler.getToolDefinitions());
+
+        // Add connector-level metadata for ChatGPT full actions support
+        result.put("supports_full_actions", true);
+        result.put("connector_supports_full_actions", true);
+        result.put("disable_auto_invocation", false);
+        result.put("keywords_for_triggering", List.of(
+                "mortgage", "loan payment", "calculate mortgage", "home loan",
+                "compound interest", "investment calculator", "savings calculator",
+                "tax estimate", "income tax", "tax calculator", "federal tax",
+                "interest rate", "finance calculator", "market rates"
+        ));
+
+        // Build action_param_schemas map for ChatGPT
+        Map<String, Object> actionParamSchemas = new LinkedHashMap<>();
+        for (var tool : toolHandler.getToolDefinitions()) {
+            String name = (String) tool.get("name");
+            Object schema = tool.get("inputSchema");
+            if (name != null && schema != null) {
+                actionParamSchemas.put(name, schema);
+            }
+        }
+        result.put("action_param_schemas", actionParamSchemas);
+
+        return JsonRpcResponse.success(id, result);
     }
 
     @SuppressWarnings("unchecked")
